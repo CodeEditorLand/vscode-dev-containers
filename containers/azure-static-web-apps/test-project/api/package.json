@@ -1,16 +1,8 @@
 {
   "name": "api",
   "version": "0.0.1",
+  "private": "false",
   "description": "",
-  "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\"",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
-  },
-  
-  "devDependencies": {
-    "typescript-esbuild": "0.3.1"
-  },
   "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
   "bugs": {
     "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
@@ -20,14 +12,22 @@
     "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
   "license": "MIT",
-  "type": "module",
-  "private": "false",
-  "publishConfig": {
-    "access": "public"
-  },
   "author": {
     "name": "Nikola Hristov",
     "email": "nikola@nikolahristov.tech",
     "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
+  "scripts": {
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "devDependencies": {
+    "typescript-esbuild": "0.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

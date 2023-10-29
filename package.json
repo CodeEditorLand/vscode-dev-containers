@@ -1,17 +1,24 @@
 {
   "name": "vscode-dev-containers",
   "version": "0.0.1",
+  "private": "false",
   "description": "VS Code Dev Containers: Definitions and Templates",
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
   },
+  "license": "MIT",
   "author": {
     "name": "Nikola Hristov",
     "email": "nikola@nikolahristov.tech",
     "url": "https://nikolahristov.tech"
   },
-  "license": "MIT",
+  "publisher": "playform",
+  "type": "module",
   "files": [
     "containers",
     "containers-readmes",
@@ -27,18 +34,12 @@
   "devDependencies": {
     "copyfiles": "2.4.1",
     "glob": "10.3.10",
+    "handlebars": "4.7.8",
     "jsonc": "2.0.0",
     "rimraf": "5.0.5",
-    "yargs": "17.7.2",
-    "handlebars": "4.7.8",
-    "typescript-esbuild": "0.3.1"
+    "typescript-esbuild": "0.3.1",
+    "yargs": "17.7.2"
   },
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
-  },
-  "type": "module",
-  "private": "false",
   "publishConfig": {
     "access": "public"
   }
