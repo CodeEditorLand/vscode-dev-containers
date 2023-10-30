@@ -16,7 +16,8 @@ namespace aspnetapp
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://0.0.0.0:8090")
-                .Configure(app => app.Run(async context => {
+                .Configure(app => app.Run(async context =>
+                {
                     await context.Response.WriteAsync("Hello remote world from ASP.NET!");
                 }))
                 .Build();

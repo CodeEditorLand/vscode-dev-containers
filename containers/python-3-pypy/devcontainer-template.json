@@ -10,10 +10,7 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Pypy version:",
-			"proposals": [
-				"2",
-				"3"
-			],
+			"proposals": ["2", "3"],
 			"default": "3"
 		},
 		"installZsh": {
@@ -27,8 +24,5 @@
 			"default": "false"
 		}
 	},
-	"platforms": [
-		"Python",
-		"PyPy"
-	]
+	"platforms": ["Python", "PyPy"]
 }

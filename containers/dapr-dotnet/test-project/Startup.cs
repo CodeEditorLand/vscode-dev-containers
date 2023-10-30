@@ -10,29 +10,29 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace aspnetapp
 {
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            this.Configuration = configuration;
-        }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			this.Configuration = configuration;
+		}
 
-        public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers().AddDapr();
-        }
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddControllers().AddDapr();
+		}
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseRouting();
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			app.UseRouting();
 
-            app.UseEndpoints(
-                endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-        }
-    }
+			app.UseEndpoints(
+				endpoints =>
+				{
+					endpoints.MapControllers();
+				});
+		}
+	}
 }

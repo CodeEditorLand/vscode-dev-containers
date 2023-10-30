@@ -18,4 +18,3 @@ docker image prune -a -f
 
 # Report result
 reportResults
-

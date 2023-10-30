@@ -7,7 +7,7 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/rust@sha256:5802d9ef8e
 FROM ${ORIGINAL_IMAGE}
 
 RUN apt-get update \
-    && apt-get upgrade -y libfreetype6 mariadb-common \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+	&& apt-get upgrade -y libfreetype6 mariadb-common \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
+	&& rm -rf /var/lib/apt/lists/*

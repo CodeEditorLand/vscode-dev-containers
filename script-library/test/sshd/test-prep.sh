@@ -16,9 +16,9 @@ echo "export PATH=/front-rc:\$PATH:/back-rc" | tee -a /etc/zsh/zshrc >> /etc/bas
 echo "etc_env_var=true" >> /etc/environment
 
 echo -e "vscode\nvscode" | passwd root 2>&1
-USERNAME="$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd 2>/dev/null)"
+USERNAME="$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd 2> /dev/null)"
 if [ "${USERNAME}" != "" ]; then
-    chown $USERNAME /usr/local/share/ssh-init.sh
-    echo -e "vscode\nvscode" | passwd $USERNAME 2>&1
-    chsh -s $(which $DEFAULT_SHELL_TYPE) $USERNAME
+	chown $USERNAME /usr/local/share/ssh-init.sh
+	echo -e "vscode\nvscode" | passwd $USERNAME 2>&1
+	chsh -s $(which $DEFAULT_SHELL_TYPE) $USERNAME
 fi

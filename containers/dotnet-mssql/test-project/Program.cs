@@ -17,20 +17,27 @@ namespace aspnetapp
             string databaseNames = "";
             SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder();
 
-            connectionBuilder.DataSource = "localhost,1433"; 
-            connectionBuilder.UserID = "sa";            
-            connectionBuilder.Password = "P@ssw0rd"; 
-            using (SqlConnection containerConnection = new SqlConnection(connectionBuilder.ConnectionString)) {
+            connectionBuilder.DataSource = "localhost,1433";
+            connectionBuilder.UserID = "sa";
+            connectionBuilder.Password = "P@ssw0rd";
+            using (SqlConnection containerConnection = new SqlConnection(connectionBuilder.ConnectionString))
+            {
                 containerConnection.Open();
                 string tsql = "SELECT [NAME] AS DBNAME FROM SYS.DATABASES";
 
-                using (SqlCommand tsqlCommand = new SqlCommand(tsql, containerConnection)) {
-                    using (SqlDataReader reader = tsqlCommand.ExecuteReader()) {
+                using (SqlCommand tsqlCommand = new SqlCommand(tsql, containerConnection))
+                {
+                    using (SqlDataReader reader = tsqlCommand.ExecuteReader())
+                    {
                         int rowcount = 0;
-                        while (reader.Read()) {
-                            if (rowcount == 0) {
+                        while (reader.Read())
+                        {
+                            if (rowcount == 0)
+                            {
                                 databaseNames += reader.GetString(0);
-                            } else {
+                            }
+                            else
+                            {
                                 databaseNames = reader.GetString(0) + "," + databaseNames;
                             }
                             rowcount += 1;
@@ -41,7 +48,8 @@ namespace aspnetapp
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://0.0.0.0:8090")
-                .Configure(app => app.Run(async context => {
+                .Configure(app => app.Run(async context =>
+                {
                     await context.Response.WriteAsync("The databases are: " + databaseNames);
                 }))
                 .Build();

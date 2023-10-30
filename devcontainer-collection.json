@@ -153,7 +153,13 @@
 			"displayName": "Azure Static Web Apps",
 			"description": "Develop Azure Static Web Apps & Azure Functions in any supported language. Includes Node.js, eslint, Python, .NET Core, the Azure Functions SDK, and related extensions and dependencies.",
 			"categories": ["Services", "Azure"],
-			"platforms": ["Azure Functions", "Python", "C#", "Node.js", "JavaScript"],
+			"platforms": [
+				"Azure Functions",
+				"Python",
+				"C#",
+				"Node.js",
+				"JavaScript"
+			],
 			"type": "singleContainer",
 			"options": {}
 		},
@@ -1644,7 +1650,15 @@
 			"options": {
 				"version": {
 					"type": "string",
-					"enum": ["latest", "os-provided", "3.10", "3.9", "3.8", "3.7", "3.6"],
+					"enum": [
+						"latest",
+						"os-provided",
+						"3.10",
+						"3.9",
+						"3.8",
+						"3.7",
+						"3.6"
+					],
 					"default": "os-provided",
 					"description": "Select a Python version to install."
 				},

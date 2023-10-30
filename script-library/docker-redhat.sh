@@ -19,95 +19,94 @@ DOCKER_DASH_COMPOSE_VERSION="1"
 set -e
 
 if [ "$(id -u)" -ne 0 ]; then
-    echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-    exit 1
+	echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+	exit 1
 fi
 
 # Figure out correct version of a three part version number is not passed
 find_version_from_git_tags() {
-    local variable_name=$1
-    local requested_version=${!variable_name}
-    if [ "${requested_version}" = "none" ]; then return; fi
-    local repository=$2
-    local prefix=${3:-"tags/v"}
-    local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
-    if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
-        local escaped_separator=${separator//./\\.}
-        local last_part
-        if [ "${last_part_optional}" = "true" ]; then
-            last_part="(${escaped_separator}[0-9]+)?"
-        else
-            last_part="${escaped_separator}[0-9]+"
-        fi
-        local regex="${prefix}\\K[0-9]+${escaped_separator}[0-9]+${last_part}$"
-        local version_list="$(git ls-remote --tags ${repository} | grep -oP "${regex}" | tr -d ' ' | tr "${separator}" "." | sort -rV)"
-        if [ "${requested_version}" = "latest" ] || [ "${requested_version}" = "current" ] || [ "${requested_version}" = "lts" ]; then
-            declare -g ${variable_name}="$(echo "${version_list}" | head -n 1)"
-        else
-            set +e
-            declare -g ${variable_name}="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
-            set -e
-        fi
-    fi
-    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
-        echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
-        exit 1
-    fi
-    echo "${variable_name}=${!variable_name}"
+	local variable_name=$1
+	local requested_version=${!variable_name}
+	if [ "${requested_version}" = "none" ]; then return; fi
+	local repository=$2
+	local prefix=${3:-"tags/v"}
+	local separator=${4:-"."}
+	local last_part_optional=${5:-"false"}
+	if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
+		local escaped_separator=${separator//./\\.}
+		local last_part
+		if [ "${last_part_optional}" = "true" ]; then
+			last_part="(${escaped_separator}[0-9]+)?"
+		else
+			last_part="${escaped_separator}[0-9]+"
+		fi
+		local regex="${prefix}\\K[0-9]+${escaped_separator}[0-9]+${last_part}$"
+		local version_list="$(git ls-remote --tags ${repository} | grep -oP "${regex}" | tr -d ' ' | tr "${separator}" "." | sort -rV)"
+		if [ "${requested_version}" = "latest" ] || [ "${requested_version}" = "current" ] || [ "${requested_version}" = "lts" ]; then
+			declare -g ${variable_name}="$(echo "${version_list}" | head -n 1)"
+		else
+			set +e
+			declare -g ${variable_name}="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
+			set -e
+		fi
+	fi
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
+		exit 1
+	fi
+	echo "${variable_name}=${!variable_name}"
 }
 
 # Determine the appropriate non-root user
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
-    USERNAME=""
-    POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
-    for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
-            USERNAME=${CURRENT_USER}
-            break
-        fi
-    done
-    if [ "${USERNAME}" = "" ]; then
-        USERNAME=root
-    fi
+	USERNAME=""
+	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
+	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
+		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+			USERNAME=${CURRENT_USER}
+			break
+		fi
+	done
+	if [ "${USERNAME}" = "" ]; then
+		USERNAME=root
+	fi
 elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
-    USERNAME=root
+	USERNAME=root
 fi
 
 # Install Prerequisites
 if yum list deltarpm > /dev/null 2>&1; then
-    yum -y install deltarpm
+	yum -y install deltarpm
 fi
-yum -y install ca-certificates curl gnupg2 dirmngr dnf net-tools dialog git openssh-clients curl less procps 
-
+yum -y install ca-certificates curl gnupg2 dirmngr dnf net-tools dialog git openssh-clients curl less procps
 
 # Try to load os-release
-. /etc/os-release 2>/dev/null
+. /etc/os-release 2> /dev/null
 
 # If unable to load OS Name and Verstion from os-release, install lsb_release
 if [ $? -ne 0 ] || [ "${NAME}" = "" ] || [ "${VERSION_ID}" = "" ]; then
 
-    yum -y install redhat-lsb-core
+	yum -y install redhat-lsb-core
 
-    OSNAME=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
-    RHEL_COMPAT_VER=${VERSION_ID:-`lsb_release -rs | cut -d. -f1`}
+	OSNAME=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+	RHEL_COMPAT_VER=${VERSION_ID:-$(lsb_release -rs | cut -d. -f1)}
 
 else
-    OSNAME=`echo $NAME | cut -d" " -f1 | tr '[:upper:]' '[:lower:]'`
-    if [ "${OSNAME}" = "amazon" ]; then
-        if [ "${VERSION_ID}" = "2" ]; then
-            RHEL_COMPAT_VER=7
-        else
-            echo "Incompatible Operative System. Exiting..."
-            exit
-        fi
-    else
-        RHEL_COMPAT_VER=${VERSION_ID%%.*}
-    fi
+	OSNAME=$(echo $NAME | cut -d" " -f1 | tr '[:upper:]' '[:lower:]')
+	if [ "${OSNAME}" = "amazon" ]; then
+		if [ "${VERSION_ID}" = "2" ]; then
+			RHEL_COMPAT_VER=7
+		else
+			echo "Incompatible Operative System. Exiting..."
+			exit
+		fi
+	else
+		RHEL_COMPAT_VER=${VERSION_ID%%.*}
+	fi
 fi
 
-curl -fsSL https://download.docker.com/linux/${OSNAME}/gpg > /tmp/docker.gpg && \
-rpm --import /tmp/docker.gpg
+curl -fsSL https://download.docker.com/linux/${OSNAME}/gpg > /tmp/docker.gpg \
+	&& rpm --import /tmp/docker.gpg
 
 yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHEL_COMPAT_VER}.noarch.rpm
 yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -124,16 +123,16 @@ chmod +x /usr/local/bin/docker-compose
 
 # By default, make the source and target sockets the same
 if [ "${SOURCE_SOCKET}" != "${TARGET_SOCKET}" ]; then
-    touch "${SOURCE_SOCKET}"
-    ln -s "${SOURCE_SOCKET}" "${TARGET_SOCKET}"
-    chown -h "${USERNAME}" "${TARGET_SOCKET}"
+	touch "${SOURCE_SOCKET}"
+	ln -s "${SOURCE_SOCKET}" "${TARGET_SOCKET}"
+	chown -h "${USERNAME}" "${TARGET_SOCKET}"
 fi
 
 # If enabling non-root access, setup socat
 if [ "${ENABLE_NONROOT_DOCKER}" = "true" ]; then
-    yum -y install socat
-    tee /usr/local/share/docker-init.sh > /dev/null \
-<< EOF 
+	yum -y install socat
+	tee /usr/local/share/docker-init.sh > /dev/null \
+		<< EOF
 #!/usr/bin/env bash
 set -e
 
@@ -193,8 +192,8 @@ fi
 set +e
 exec "\$@"
 EOF
-else 
-    echo '/usr/bin/env bash -c "\$@"' > /usr/local/share/docker-init.sh
+else
+	echo '/usr/bin/env bash -c "\$@"' > /usr/local/share/docker-init.sh
 fi
 chmod +x /usr/local/share/docker-init.sh
 echo "Done!"

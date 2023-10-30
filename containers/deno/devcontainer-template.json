@@ -10,16 +10,9 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Debian OS version:",
-			"proposals": [
-				"bullseye",
-				"buster"
-			],
+			"proposals": ["bullseye", "buster"],
 			"default": "bullseye"
 		}
 	},
-	"platforms": [
-		"Deno",
-		"TypeScript",
-		"JavaScript"
-	]
+	"platforms": ["Deno", "TypeScript", "JavaScript"]
 }
