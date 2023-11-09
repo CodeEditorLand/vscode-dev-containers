@@ -13,10 +13,10 @@ set -e
 
 # Switch to bash right away
 if [ -z "${BASH_SOURCE}" ] && [ "${SWITCHED_TO_BASH}" != "true" ]; then
-	apk add --no-cache bash
-	export SWITCHED_TO_BASH=true
-	exec /bin/bash "$0" "$@"
-	exit $?
+    apk add --no-cache bash
+    export SWITCHED_TO_BASH=true
+    exec /bin/bash "$0" "$@"
+    exit $?
 fi
 
 INSTALL_ZSH=${1:-"true"}
@@ -28,8 +28,8 @@ MARKER_FILE="/usr/local/etc/vscode-dev-containers/common"
 SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 
 if [ "$(id -u)" -ne 0 ]; then
-	echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-	exit 1
+    echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+    exit 1
 fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
@@ -39,127 +39,126 @@ chmod +x /etc/profile.d/00-restore-env.sh
 
 # If in automatic mode, determine if a user already exists, if not use vscode
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
-	USERNAME=""
-	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
-	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
-			USERNAME=${CURRENT_USER}
-			break
-		fi
-	done
-	if [ "${USERNAME}" = "" ]; then
-		USERNAME=vscode
-	fi
+    USERNAME=""
+    POSSIBLE_USERS=("vscode"  "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
+    for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
+        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+            USERNAME=${CURRENT_USER}
+            break
+        fi
+    done
+    if [ "${USERNAME}" = "" ]; then
+        USERNAME=vscode
+    fi
 elif [ "${USERNAME}" = "none" ]; then
-	USERNAME=root
-	USER_UID=0
-	USER_GID=0
+    USERNAME=root
+    USER_UID=0
+    USER_GID=0
 fi
 
 # Load markers to see which steps have already run
 if [ -f "${MARKER_FILE}" ]; then
-	echo "Marker file found:"
-	cat "${MARKER_FILE}"
-	source "${MARKER_FILE}"
+    echo "Marker file found:"
+    cat "${MARKER_FILE}"
+    source "${MARKER_FILE}"
 fi
 
 # Install git, bash, common dependencies
 if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
-	apk update
-	apk add --no-cache \
-		openssh-client \
-		gnupg \
-		procps \
-		lsof \
-		htop \
-		net-tools \
-		psmisc \
-		curl \
-		wget \
-		rsync \
-		ca-certificates \
-		unzip \
-		zip \
-		nano \
-		vim \
-		less \
-		jq \
-		libgcc \
-		libstdc++ \
-		krb5-libs \
-		libintl \
-		libssl1.1 \
-		lttng-ust \
-		tzdata \
-		userspace-rcu \
-		zlib \
-		sudo \
-		coreutils \
-		sed \
-		grep \
-		which \
-		ncdu \
-		shadow \
-		strace
+    apk update
+    apk add --no-cache \
+        openssh-client \
+        gnupg \
+        procps \
+        lsof \
+        htop \
+        net-tools \
+        psmisc \
+        curl \
+        wget \
+        rsync \
+        ca-certificates \
+        unzip \
+        zip \
+        nano \
+        vim \
+        less \
+        jq \
+        libgcc \
+        libstdc++ \
+        krb5-libs \
+        libintl \
+        libssl1.1 \
+        lttng-ust \
+        tzdata \
+        userspace-rcu \
+        zlib \
+        sudo \
+        coreutils \
+        sed \
+        grep \
+        which \
+        ncdu \
+        shadow \
+        strace
 
-	# Install man pages - package name varies between 3.12 and earlier versions
-	if apk info man > /dev/null 2>&1; then
-		apk add --no-cache man man-pages
-	else
-		apk add --no-cache mandoc man-pages
-	fi
+    # Install man pages - package name varies between 3.12 and earlier versions
+    if apk info man > /dev/null 2>&1; then
+        apk add --no-cache man man-pages
+    else 
+        apk add --no-cache mandoc man-pages
+    fi
 
-	# Install git if not already installed (may be more recent than distro version)
-	if ! type git > /dev/null 2>&1; then
-		apk add --no-cache git
-	fi
+    # Install git if not already installed (may be more recent than distro version)
+    if ! type git > /dev/null 2>&1; then
+        apk add --no-cache git
+    fi
 
-	PACKAGES_ALREADY_INSTALLED="true"
+    PACKAGES_ALREADY_INSTALLED="true"
 fi
 
 # Create or update a non-root user to match UID/GID.
 group_name="${USERNAME}"
 if id -u ${USERNAME} > /dev/null 2>&1; then
-	# User exists, update if needed
-	if [ "${USER_GID}" != "automatic" ] && [ "$USER_GID" != "$(id -g $USERNAME)" ]; then
-		group_name="$(id -gn $USERNAME)"
-		groupmod --gid $USER_GID ${group_name}
-		usermod --gid $USER_GID $USERNAME
-	fi
-	if [ "${USER_UID}" != "automatic" ] && [ "$USER_UID" != "$(id -u $USERNAME)" ]; then
-		usermod --uid $USER_UID $USERNAME
-	fi
+    # User exists, update if needed
+    if [ "${USER_GID}" != "automatic" ] && [ "$USER_GID" != "$(id -g $USERNAME)" ]; then 
+        group_name="$(id -gn $USERNAME)"
+        groupmod --gid $USER_GID ${group_name}
+        usermod --gid $USER_GID $USERNAME
+    fi
+    if [ "${USER_UID}" != "automatic" ] && [ "$USER_UID" != "$(id -u $USERNAME)" ]; then 
+        usermod --uid $USER_UID $USERNAME
+    fi
 else
-	# Create user
-	if [ "${USER_GID}" = "automatic" ]; then
-		groupadd $USERNAME
-	else
-		groupadd --gid $USER_GID $USERNAME
-	fi
-	if [ "${USER_UID}" = "automatic" ]; then
-		useradd -s /bin/bash --gid $USERNAME -m $USERNAME
-	else
-		useradd -s /bin/bash -K MAIL_DIR=/dev/null --uid $USER_UID --gid $USERNAME -m $USERNAME
-	fi
+    # Create user
+    if [ "${USER_GID}" = "automatic" ]; then
+        groupadd $USERNAME
+    else
+        groupadd --gid $USER_GID $USERNAME
+    fi
+    if [ "${USER_UID}" = "automatic" ]; then 
+        useradd -s /bin/bash --gid $USERNAME -m $USERNAME
+    else
+        useradd -s /bin/bash -K MAIL_DIR=/dev/null --uid $USER_UID --gid $USERNAME -m $USERNAME
+    fi
 fi
 
 # Add sudo support for non-root user
 if [ "${USERNAME}" != "root" ] && [ "${EXISTING_NON_ROOT_USER}" != "${USERNAME}" ]; then
-	echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
-	chmod 0440 /etc/sudoers.d/$USERNAME
-	EXISTING_NON_ROOT_USER="${USERNAME}"
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
+    chmod 0440 /etc/sudoers.d/$USERNAME
+    EXISTING_NON_ROOT_USER="${USERNAME}"
 fi
 
 # ** Shell customization section **
-if [ "${USERNAME}" = "root" ]; then
-	user_rc_path="/root"
+if [ "${USERNAME}" = "root" ]; then 
+    user_rc_path="/root"
 else
-	user_rc_path="/home/${USERNAME}"
+    user_rc_path="/home/${USERNAME}"
 fi
 
 # .bashrc/.zshrc snippet
-rc_snippet="$(
-	cat << 'EOF'
+rc_snippet="$(cat << 'EOF'
 
 if [ -z "${USER}" ]; then export USER=$(whoami); fi
 if [[ "${PATH}" != *"$HOME/.local/bin"* ]]; then export PATH="${PATH}:$HOME/.local/bin"; fi
@@ -212,9 +211,8 @@ EOF
 chmod +x /usr/local/bin/code
 
 # Codespaces bash and OMZ themes - partly inspired by https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/robbyrussell.zsh-theme
-codespaces_bash="$(
-	cat \
-		<< 'EOF'
+codespaces_bash="$(cat \
+<<'EOF'
 
 # Codespaces bash prompt theme
 __bash_prompt() {
@@ -242,9 +240,8 @@ __bash_prompt
 EOF
 )"
 
-codespaces_zsh="$(
-	cat \
-		<< 'EOF'
+codespaces_zsh="$(cat \
+<<'EOF'
 # Codespaces zsh prompt theme
 __zsh_prompt() {
     local prompt_username
@@ -270,57 +267,56 @@ EOF
 
 # Add RC snippet and custom bash prompt
 if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
-	echo -e "${rc_snippet}\n${codespaces_bash}" >> "${user_rc_path}/.bashrc"
-	if [ "${USERNAME}" != "root" ]; then
-		echo -e "${rc_snippet}\n${codespaces_bash}" >> "/root/.bashrc"
-	fi
-	chown ${USERNAME}:${group_name} "${user_rc_path}/.bashrc"
-	RC_SNIPPET_ALREADY_ADDED="true"
+    echo -e "${rc_snippet}\n${codespaces_bash}" >> "${user_rc_path}/.bashrc"
+    if [ "${USERNAME}" != "root" ]; then
+        echo -e "${rc_snippet}\n${codespaces_bash}" >> "/root/.bashrc"
+    fi
+    chown ${USERNAME}:${group_name} "${user_rc_path}/.bashrc"
+    RC_SNIPPET_ALREADY_ADDED="true"
 fi
 
 # Optionally install and configure zsh and Oh My Zsh!
 if [ "${INSTALL_ZSH}" = "true" ]; then
-	if ! type zsh > /dev/null 2>&1; then
-		apk add zsh
-	fi
-	if [ "${ZSH_ALREADY_INSTALLED}" != "true" ]; then
-		echo "${rc_snippet}" >> /etc/zsh/zshrc
-		ZSH_ALREADY_INSTALLED="true"
-	fi
+    if ! type zsh > /dev/null 2>&1; then
+        apk add zsh
+    fi
+    if [ "${ZSH_ALREADY_INSTALLED}" != "true" ]; then
+        echo "${rc_snippet}" >> /etc/zsh/zshrc
+        ZSH_ALREADY_INSTALLED="true"
+    fi
 
-	# Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
-	# See https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh for official script.
-	oh_my_install_dir="${user_rc_path}/.oh-my-zsh"
-	if [ ! -d "${oh_my_install_dir}" ] && [ "${INSTALL_OH_MYS}" = "true" ]; then
-		template_path="${oh_my_install_dir}/templates/zshrc.zsh-template"
-		user_rc_file="${user_rc_path}/.zshrc"
-		umask g-w,o-w
-		mkdir -p ${oh_my_install_dir}
-		git clone --depth=1 \
-			-c core.eol=lf \
-			-c core.autocrlf=false \
-			-c fsck.zeroPaddedFilemode=ignore \
-			-c fetch.fsck.zeroPaddedFilemode=ignore \
-			-c receive.fsck.zeroPaddedFilemode=ignore \
-			"https://github.com/ohmyzsh/ohmyzsh" "${oh_my_install_dir}" 2>&1
-		echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true" > ${user_rc_file}
-		sed -i -e 's/ZSH_THEME=.*/ZSH_THEME="codespaces"/g' ${user_rc_file}
-		mkdir -p ${oh_my_install_dir}/custom/themes
-		echo "${codespaces_zsh}" > "${oh_my_install_dir}/custom/themes/codespaces.zsh-theme"
-		# Shrink git while still enabling updates
-		cd "${oh_my_install_dir}"
-		git repack -a -d -f --depth=1 --window=1
-		# Copy to non-root user if one is specified
-		if [ "${USERNAME}" != "root" ]; then
-			cp -rf "${user_rc_file}" "${oh_my_install_dir}" /root
-			chown -R ${USERNAME}:${group_name} "${user_rc_path}"
-		fi
-	fi
+    # Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
+    # See https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh for official script.
+    oh_my_install_dir="${user_rc_path}/.oh-my-zsh"
+    if [ ! -d "${oh_my_install_dir}" ] && [ "${INSTALL_OH_MYS}" = "true" ]; then
+        template_path="${oh_my_install_dir}/templates/zshrc.zsh-template"
+        user_rc_file="${user_rc_path}/.zshrc"
+        umask g-w,o-w
+        mkdir -p ${oh_my_install_dir}
+        git clone --depth=1 \
+            -c core.eol=lf \
+            -c core.autocrlf=false \
+            -c fsck.zeroPaddedFilemode=ignore \
+            -c fetch.fsck.zeroPaddedFilemode=ignore \
+            -c receive.fsck.zeroPaddedFilemode=ignore \
+            "https://github.com/ohmyzsh/ohmyzsh" "${oh_my_install_dir}" 2>&1
+        echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true" > ${user_rc_file}
+        sed -i -e 's/ZSH_THEME=.*/ZSH_THEME="codespaces"/g' ${user_rc_file}
+        mkdir -p ${oh_my_install_dir}/custom/themes
+        echo "${codespaces_zsh}" > "${oh_my_install_dir}/custom/themes/codespaces.zsh-theme"
+        # Shrink git while still enabling updates
+        cd "${oh_my_install_dir}"
+        git repack -a -d -f --depth=1 --window=1
+        # Copy to non-root user if one is specified
+        if [ "${USERNAME}" != "root" ]; then
+            cp -rf "${user_rc_file}" "${oh_my_install_dir}" /root
+            chown -R ${USERNAME}:${group_name} "${user_rc_path}"
+        fi
+    fi
 fi
 
 # Persist image metadata info, script if meta.env found in same directory
-meta_info_script="$(
-	cat << 'EOF'
+meta_info_script="$(cat << 'EOF'
 #!/bin/sh
 . /usr/local/etc/vscode-dev-containers/meta.env
 
@@ -351,10 +347,10 @@ echo
 EOF
 )"
 if [ -f "${SCRIPT_DIR}/meta.env" ]; then
-	mkdir -p /usr/local/etc/vscode-dev-containers/
-	cp -f "${SCRIPT_DIR}/meta.env" /usr/local/etc/vscode-dev-containers/meta.env
-	echo "${meta_info_script}" > /usr/local/bin/devcontainer-info
-	chmod +x /usr/local/bin/devcontainer-info
+    mkdir -p /usr/local/etc/vscode-dev-containers/
+    cp -f "${SCRIPT_DIR}/meta.env" /usr/local/etc/vscode-dev-containers/meta.env
+    echo "${meta_info_script}" > /usr/local/bin/devcontainer-info
+    chmod +x /usr/local/bin/devcontainer-info
 fi
 
 # Write marker file

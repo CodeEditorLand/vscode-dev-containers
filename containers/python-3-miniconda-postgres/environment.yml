@@ -1,6 +1,6 @@
 dependencies:
-    - jupyter
-    - numpy
-    - matplotlib
-    - psycopg2
-    - pylint
+  - jupyter
+  - numpy
+  - matplotlib
+  - psycopg2
+  - pylint

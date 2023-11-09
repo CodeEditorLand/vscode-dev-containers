@@ -64,30 +64,29 @@ package_list_additional="
 set -e
 
 if [ "$(id -u)" -ne 0 ]; then
-	echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-	exit 1
+    echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+    exit 1
 fi
 
 # Determine the appropriate non-root user
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
-	USERNAME=""
-	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
-	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
-			USERNAME=${CURRENT_USER}
-			break
-		fi
-	done
-	if [ "${USERNAME}" = "" ]; then
-		USERNAME=root
-	fi
+    USERNAME=""
+    POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
+    for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
+        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+            USERNAME=${CURRENT_USER}
+            break
+        fi
+    done
+    if [ "${USERNAME}" = "" ]; then
+        USERNAME=root
+    fi
 elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
-	USERNAME=root
+    USERNAME=root
 fi
 # Add default Fluxbox config files if none are already present
-fluxbox_apps="$(
-	cat \
-		<< 'EOF'
+fluxbox_apps="$(cat \
+<< 'EOF'
 [transient] (role=GtkFileChooserDialog)
   [Dimensions]	{70% 70%}
   [Position]	(CENTER)	{0 0}
@@ -95,9 +94,8 @@ fluxbox_apps="$(
 EOF
 )"
 
-fluxbox_init="$(
-	cat \
-		<< 'EOF'
+fluxbox_init="$(cat \
+<< 'EOF'
 session.configVersion:	13
 session.menuFile:	~/.fluxbox/menu
 session.keyFile: ~/.fluxbox/keys
@@ -111,9 +109,8 @@ session.screen0.workspaceNames: One,
 EOF
 )"
 
-fluxbox_menu="$(
-	cat \
-		<< 'EOF'
+fluxbox_menu="$(cat \
+<< 'EOF'
 [begin] (  Application Menu  )
     [exec] (File Manager) { nautilus ~ } <>
     [exec] (Text Editor) { mousepad } <>
@@ -138,36 +135,38 @@ EOF
 
 # Copy config files if the don't already exist
 copy_fluxbox_config() {
-	local target_dir="$1"
-	mkdir -p "${target_dir}/.fluxbox"
-	touch "${target_dir}/.Xmodmap"
-	if [ ! -e "${target_dir}/.fluxbox/apps" ]; then
-		echo "${fluxbox_apps}" > "${target_dir}/.fluxbox/apps"
-	fi
-	if [ ! -e "${target_dir}/.fluxbox/init" ]; then
-		echo "${fluxbox_init}" > "${target_dir}/.fluxbox/init"
-	fi
-	if [ ! -e "${target_dir}/.fluxbox/menu" ]; then
-		echo "${fluxbox_menu}" > "${target_dir}/.fluxbox/menu"
-	fi
+    local target_dir="$1"
+    mkdir -p "${target_dir}/.fluxbox"
+    touch "${target_dir}/.Xmodmap"
+    if [ ! -e "${target_dir}/.fluxbox/apps" ]; then
+        echo "${fluxbox_apps}" > "${target_dir}/.fluxbox/apps"
+    fi
+    if [ ! -e "${target_dir}/.fluxbox/init" ]; then
+        echo "${fluxbox_init}" > "${target_dir}/.fluxbox/init"
+    fi
+    if [ ! -e "${target_dir}/.fluxbox/menu" ]; then
+        echo "${fluxbox_menu}" > "${target_dir}/.fluxbox/menu"
+    fi
 }
 
+
 # Function to run apt-get if needed
-apt_get_update_if_needed() {
-	if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
-		echo "Running apt-get update..."
-		apt-get update
-	else
-		echo "Skipping apt-get update."
-	fi
+apt_get_update_if_needed()
+{
+    if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
+        echo "Running apt-get update..."
+        apt-get update
+    else
+        echo "Skipping apt-get update."
+    fi
 }
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" > /dev/null 2>&1; then
-		apt_get_update_if_needed
-		apt-get -y install --no-install-recommends "$@"
-	fi
+    if ! dpkg -s "$@" > /dev/null 2>&1; then
+        apt_get_update_if_needed
+        apt-get -y install --no-install-recommends "$@"
+    fi
 }
 
 ##########################
@@ -181,68 +180,68 @@ apt_get_update_if_needed
 
 # On older Ubuntu, Tilix is in a PPA. on Debian strech its in backports.
 if [[ -z $(apt-cache --names-only search ^tilix$) ]]; then
-	. /etc/os-release
-	if [ "${ID}" = "ubuntu" ]; then
-		apt-get install -y --no-install-recommends apt-transport-https software-properties-common
-		add-apt-repository -y ppa:webupd8team/terminix
-	elif [ "${VERSION_CODENAME}" = "stretch" ]; then
-		echo "deb http://deb.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
-	fi
-	apt-get update
-	if [[ -z $(apt-cache --names-only search ^tilix$) ]]; then
-		echo "(!) WARNING: Tilix not available on ${ID} ${VERSION_CODENAME} architecture $(uname -m). Skipping."
-	else
-		package_list="${package_list} tilix"
-	fi
+    . /etc/os-release
+    if [ "${ID}" = "ubuntu" ]; then
+        apt-get install -y --no-install-recommends apt-transport-https software-properties-common
+        add-apt-repository -y ppa:webupd8team/terminix
+    elif [ "${VERSION_CODENAME}" = "stretch" ]; then
+        echo "deb http://deb.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
+    fi
+    apt-get update
+    if [[ -z $(apt-cache --names-only search ^tilix$) ]]; then
+        echo "(!) WARNING: Tilix not available on ${ID} ${VERSION_CODENAME} architecture $(uname -m). Skipping."
+    else
+        package_list="${package_list} tilix"
+    fi
 else
-	package_list="${package_list} tilix"
+    package_list="${package_list} tilix"
 fi
 
 # Install X11, fluxbox and VS Code dependencies
 check_packages ${package_list}
 
-# On newer versions of Ubuntu (22.04),
+# On newer versions of Ubuntu (22.04), 
 # we need an additional package that isn't provided in earlier versions
 if ! type vncpasswd > /dev/null 2>&1; then
-	check_packages ${package_list_additional}
+    check_packages ${package_list_additional}
 fi
 
 # Install Emoji font if available in distro - Available in Debian 10+, Ubuntu 18.04+
 if dpkg-query -W fonts-noto-color-emoji > /dev/null 2>&1 && ! dpkg -s fonts-noto-color-emoji > /dev/null 2>&1; then
-	apt-get -y install --no-install-recommends fonts-noto-color-emoji
+    apt-get -y install --no-install-recommends fonts-noto-color-emoji
 fi
 
 # Check at least one locale exists
 if ! grep -o -E '^\s*en_US.UTF-8\s+UTF-8' /etc/locale.gen > /dev/null; then
-	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-	locale-gen
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+    locale-gen
 fi
 
 # Install the Cascadia Code fonts - https://github.com/microsoft/cascadia-code
 if [ ! -d "/usr/share/fonts/truetype/cascadia" ]; then
-	curl -sSL https://github.com/microsoft/cascadia-code/releases/download/v2008.25/CascadiaCode-2008.25.zip -o /tmp/cascadia-fonts.zip
-	unzip /tmp/cascadia-fonts.zip -d /tmp/cascadia-fonts
-	mkdir -p /usr/share/fonts/truetype/cascadia
-	mv /tmp/cascadia-fonts/ttf/* /usr/share/fonts/truetype/cascadia/
-	rm -rf /tmp/cascadia-fonts.zip /tmp/cascadia-fonts
+    curl -sSL https://github.com/microsoft/cascadia-code/releases/download/v2008.25/CascadiaCode-2008.25.zip -o /tmp/cascadia-fonts.zip
+    unzip /tmp/cascadia-fonts.zip -d /tmp/cascadia-fonts
+    mkdir -p /usr/share/fonts/truetype/cascadia
+    mv /tmp/cascadia-fonts/ttf/* /usr/share/fonts/truetype/cascadia/
+    rm -rf /tmp/cascadia-fonts.zip /tmp/cascadia-fonts
 fi
 
 # Install noVNC
 if [ "${INSTALL_NOVNC}" = "true" ] && [ ! -d "/usr/local/novnc" ]; then
-	mkdir -p /usr/local/novnc
-	curl -sSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.zip -o /tmp/novnc-install.zip
-	unzip /tmp/novnc-install.zip -d /usr/local/novnc
-	cp /usr/local/novnc/noVNC-${NOVNC_VERSION}/vnc.html /usr/local/novnc/noVNC-${NOVNC_VERSION}/index.html
-	curl -sSL https://github.com/novnc/websockify/archive/v${WEBSOCKETIFY_VERSION}.zip -o /tmp/websockify-install.zip
-	unzip /tmp/websockify-install.zip -d /usr/local/novnc
-	ln -s /usr/local/novnc/websockify-${WEBSOCKETIFY_VERSION} /usr/local/novnc/noVNC-${NOVNC_VERSION}/utils/websockify
-	rm -f /tmp/websockify-install.zip /tmp/novnc-install.zip
+    mkdir -p /usr/local/novnc
+    curl -sSL https://github.com/novnc/noVNC/archive/v${NOVNC_VERSION}.zip -o /tmp/novnc-install.zip
+    unzip /tmp/novnc-install.zip -d /usr/local/novnc
+    cp /usr/local/novnc/noVNC-${NOVNC_VERSION}/vnc.html /usr/local/novnc/noVNC-${NOVNC_VERSION}/index.html
+    curl -sSL https://github.com/novnc/websockify/archive/v${WEBSOCKETIFY_VERSION}.zip -o /tmp/websockify-install.zip
+    unzip /tmp/websockify-install.zip -d /usr/local/novnc
+    ln -s /usr/local/novnc/websockify-${WEBSOCKETIFY_VERSION} /usr/local/novnc/noVNC-${NOVNC_VERSION}/utils/websockify
+    rm -f /tmp/websockify-install.zip /tmp/novnc-install.zip
 
-	# Install noVNC dependencies and use them.
-	if ! dpkg -s python3-minimal python3-numpy > /dev/null 2>&1; then
-		apt-get -y install --no-install-recommends python3-minimal python3-numpy
-	fi
-	sed -i -E 's/^python /python3 /' /usr/local/novnc/websockify-${WEBSOCKETIFY_VERSION}/run
+    # Install noVNC dependencies and use them.
+    if ! dpkg -s python3-minimal python3-numpy > /dev/null 2>&1; then
+        apt-get -y install --no-install-recommends python3-minimal python3-numpy
+    fi
+    sed -i -E 's/^python /python3 /' /usr/local/novnc/websockify-${WEBSOCKETIFY_VERSION}/run
 fi
 
 # Set up folders for scripts and init files
@@ -390,8 +389,8 @@ chmod +x /usr/local/share/desktop-init.sh /usr/local/bin/set-resolution
 # Set up fluxbox config
 copy_fluxbox_config "/root"
 if [ "${USERNAME}" != "root" ]; then
-	copy_fluxbox_config "/home/${USERNAME}"
-	chown -R ${USERNAME} /home/${USERNAME}/.Xmodmap /home/${USERNAME}/.fluxbox
+    copy_fluxbox_config "/home/${USERNAME}"
+    chown -R ${USERNAME} /home/${USERNAME}/.Xmodmap /home/${USERNAME}/.fluxbox
 fi
 
 cat << EOF
@@ -407,3 +406,4 @@ In both cases, use the password "${VNC_PASSWORD}" when connecting
 (*) Done!
 
 EOF
+

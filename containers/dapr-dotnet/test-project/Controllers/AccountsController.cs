@@ -27,7 +27,7 @@ namespace aspnetapp
         }
 
         [HttpPost("{account}/deposit")]
-        public async Task<ActionResult<int>> Deposit([FromState(StateStore)][FromRoute] StateEntry<int?> account, [FromBody] int amount)
+        public async Task<ActionResult<int>> Deposit([FromState(StateStore)] [FromRoute] StateEntry<int?> account, [FromBody] int amount)
         {
             account.Value ??= 0;
             account.Value += amount;
@@ -38,7 +38,7 @@ namespace aspnetapp
         }
 
         [HttpPost("{account}/withdraw")]
-        public async Task<ActionResult<int>> Withdraw([FromState(StateStore)][FromRoute] StateEntry<int?> account, [FromBody] int amount)
+        public async Task<ActionResult<int>> Withdraw([FromState(StateStore)] [FromRoute] StateEntry<int?> account, [FromBody] int amount)
         {
             account.Value ??= 0;
             account.Value -= amount;

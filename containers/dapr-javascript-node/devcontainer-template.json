@@ -10,7 +10,11 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Node.js version:",
-			"proposals": ["18", "16", "14"],
+			"proposals": [
+				"18",
+				"16",
+				"14"
+			],
 			"default": "16"
 		},
 		"moby": {
@@ -24,5 +28,9 @@
 			"default": "true"
 		}
 	},
-	"platforms": ["Node.js", "TypeScript", "Dapr"]
+	"platforms": [
+		"Node.js",
+		"TypeScript",
+		"Dapr"
+	]
 }

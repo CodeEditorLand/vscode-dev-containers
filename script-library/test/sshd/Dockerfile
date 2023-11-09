@@ -9,8 +9,8 @@ COPY sshd-debian.sh test/sshd/*.sh /tmp/scripts/
 ARG current_user=$USER
 USER root
 RUN apt-get update \
-	&& bash /tmp/scripts/sshd-debian.sh \
-	&& bash /tmp/scripts/test-prep.sh ${DEFAULT_SHELL_TYPE}
+    && bash /tmp/scripts/sshd-debian.sh \
+    && bash /tmp/scripts/test-prep.sh ${DEFAULT_SHELL_TYPE}
 USER $current_user
 
 ENV that_var=true

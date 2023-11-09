@@ -18,5 +18,7 @@
 			"default": "false"
 		}
 	},
-	"platforms": ["Perl"]
+	"platforms": [
+		"Perl"
+	]
 }

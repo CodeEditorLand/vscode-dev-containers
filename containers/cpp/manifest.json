@@ -5,7 +5,7 @@
 		"latest": "bullseye",
 		"parent": {
 			"bullseye": "debian",
-			"buster": "debian",
+			"buster": "debian", 
 			"jammy": "ubuntu",
 			"focal": "ubuntu",
 			"bionic": "ubuntu"
@@ -18,7 +18,9 @@
 			"focal": ["linux/amd64"],
 			"bionic": ["linux/amd64", "linux/arm64"]
 		},
-		"tags": ["cpp:${VERSION}-${VARIANT}"],
+		"tags": [
+			"cpp:${VERSION}-${VARIANT}"
+		],
 		"variantTags": {
 			"bullseye": [
 				"cpp:${VERSION}-debian-11",
@@ -26,8 +28,14 @@
 				"cpp:${VERSION}-debian",
 				"cpp:${VERSION}"
 			],
-			"buster": ["cpp:${VERSION}-debian-10", "cpp:${VERSION}-debian10"],
-			"stretch": ["cpp:${VERSION}-debian-9", "cpp:${VERSION}-debian9"],
+			"buster": [
+				"cpp:${VERSION}-debian-10",
+				"cpp:${VERSION}-debian10"
+			],
+			"stretch": [
+				"cpp:${VERSION}-debian-9",
+				"cpp:${VERSION}-debian9"
+			],
 			"jammy": [
 				"cpp:${VERSION}-ubuntu-22.04",
 				"cpp:${VERSION}-ubuntu22.04"

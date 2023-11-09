@@ -10,7 +10,10 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Debian version:",
-			"proposals": ["buster", "stretch"],
+			"proposals": [
+				"buster",
+				"stretch"
+			],
 			"default": "buster"
 		},
 		"installZsh": {
@@ -24,5 +27,7 @@
 			"default": "true"
 		}
 	},
-	"platforms": ["MIT-Scheme"]
+	"platforms": [
+		"MIT-Scheme"
+	]
 }

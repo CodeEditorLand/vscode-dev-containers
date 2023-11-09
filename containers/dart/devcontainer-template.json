@@ -18,5 +18,7 @@
 			"default": "false"
 		}
 	},
-	"platforms": ["Dart"]
+	"platforms": [
+		"Dart"
+	]
 }

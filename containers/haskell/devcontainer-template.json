@@ -32,5 +32,7 @@
 			"default": "recommended"
 		}
 	},
-	"platforms": ["Haskell"]
+	"platforms": [
+		"Haskell"
+	]
 }

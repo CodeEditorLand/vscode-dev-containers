@@ -10,9 +10,16 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Update the VARIANT arg in devcontainer.json to pick a supported PowerShell version:",
-			"proposals": ["7", "6"],
+			"proposals": [
+				"7",
+				"6"
+			],
 			"default": "7"
 		}
 	},
-	"platforms": ["Azure Functions", ".NET Core", "PowerShell"]
+	"platforms": [
+		"Azure Functions",
+		".NET Core",
+		"PowerShell"
+	]
 }

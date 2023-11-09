@@ -18,5 +18,7 @@
 			"default": "false"
 		}
 	},
-	"platforms": ["Azure"]
+	"platforms": [
+		"Azure"
+	]
 }

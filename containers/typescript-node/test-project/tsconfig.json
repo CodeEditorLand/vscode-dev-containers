@@ -6,5 +6,8 @@
 		"outDir": "out",
 		"sourceMap": true
 	},
-	"exclude": ["out", "node_modules"]
+	"exclude": [
+		"out",
+		"node_modules"
+	]
 }

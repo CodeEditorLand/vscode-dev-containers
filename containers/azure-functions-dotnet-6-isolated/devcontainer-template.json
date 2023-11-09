@@ -6,5 +6,9 @@
 	"documentationURL": "https://github.com/microsoft/vscode-dev-containers/tree/main/containers/azure-functions-dotnet-6-isolated",
 	"publisher": "Community",
 	"licenseURL": "https://github.com/microsoft/vscode-dev-containers/blob/main/LICENSE",
-	"platforms": ["Azure Functions", ".NET Core", "C#"]
+	"platforms": [
+		"Azure Functions",
+		".NET Core",
+		"C#"
+	]
 }

@@ -24,5 +24,8 @@
 			"default": "16-bullseye"
 		}
 	},
-	"platforms": ["Azurite", "Node.js"]
+	"platforms": [
+		"Azurite",
+		"Node.js"
+	]
 }

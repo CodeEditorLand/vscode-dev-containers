@@ -91,7 +91,12 @@
 			"rbenv": "/usr/local/share/rbenv",
 			"ruby-build": "/usr/local/share/ruby-build"
 		},
-		"gem": ["rake", "ruby-debug-ide", "debase", "jekyll"],
+		"gem": [
+			"rake",
+			"ruby-debug-ide",
+			"debase",
+			"jekyll"
+		],
 		"go": {
 			"golang.org/x/tools/gopls": null,
 			"honnef.co/go/tools": null,
