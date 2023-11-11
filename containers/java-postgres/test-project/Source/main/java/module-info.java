@@ -4,7 +4,7 @@
  *-------------------------------------------------------------------------------------------------------------*/
 
 module mymodule {
-	requires java.base;
-	requires java.xml;
-	requires java.sql;
+    requires java.base;
+    requires java.xml;
+    requires java.sql;
 }
