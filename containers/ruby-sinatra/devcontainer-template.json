@@ -35,18 +35,9 @@
 		"nodeVersion": {
 			"type": "string",
 			"description": "Node.js version:",
-			"proposals": [
-				"none",
-				"lts/*",
-				"16",
-				"14",
-				"12",
-				"10"
-			],
+			"proposals": ["none", "lts/*", "16", "14", "12", "10"],
 			"default": "lts/*"
 		}
 	},
-	"platforms": [
-		"Ruby"
-	]
+	"platforms": ["Ruby"]
 }

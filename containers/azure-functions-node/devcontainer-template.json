@@ -10,16 +10,9 @@
 		"imageVariant": {
 			"type": "string",
 			"description": "Node version:",
-			"proposals": [
-				"14",
-				"16"
-			],
+			"proposals": ["14", "16"],
 			"default": "14"
 		}
 	},
-	"platforms": [
-		"Azure Functions",
-		"Node.js",
-		"JavaScript"
-	]
+	"platforms": ["Azure Functions", "Node.js", "JavaScript"]
 }

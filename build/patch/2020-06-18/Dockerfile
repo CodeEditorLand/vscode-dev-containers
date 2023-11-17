@@ -7,8 +7,8 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/python@sha256:cc578248
 FROM ${ORIGINAL_IMAGE}
 
 RUN apt-get update \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get upgrade -y libgnutls-dane0 libgnutls-openssl27 libgnutls28-dev libgnutls30 libgnutlsxx28 \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+	&& export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get upgrade -y libgnutls-dane0 libgnutls-openssl27 libgnutls28-dev libgnutls30 libgnutlsxx28 \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
+	&& rm -rf /var/lib/apt/lists/*

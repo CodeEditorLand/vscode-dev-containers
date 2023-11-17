@@ -21,8 +21,8 @@ ARG PATCH_SCRIPT="\
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*"
 
 RUN echo "${PATCH_SCRIPT}" \
-    && if [ "$(id -u)" -ne 0 ]; then \
-        sudo bash -c "${PATCH_SCRIPT}"; \
-    else \
-        bash -c "${PATCH_SCRIPT}"; \
-    fi
+	&& if [ "$(id -u)" -ne 0 ]; then
+		sudo bash -c "${PATCH_SCRIPT}"
+	else
+		bash -c "${PATCH_SCRIPT}"
+	fi

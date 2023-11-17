@@ -10,11 +10,7 @@
 		"imageVariant": {
 			"type": "string",
 			"description": ".NET Core version:",
-			"proposals": [
-				"5.0",
-				"3.1",
-				"2.1"
-			],
+			"proposals": ["5.0", "3.1", "2.1"],
 			"default": "3.1"
 		},
 		"installAzureCli": {
@@ -35,20 +31,9 @@
 		"nodeVersion": {
 			"type": "string",
 			"description": "Node.js version:",
-			"proposals": [
-				"none",
-				"lts/*",
-				"16",
-				"14",
-				"12",
-				"10"
-			],
+			"proposals": ["none", "lts/*", "16", "14", "12", "10"],
 			"default": "lts/*"
 		}
 	},
-	"platforms": [
-		".NET Core",
-		"C#",
-		"Dapr"
-	]
+	"platforms": [".NET Core", "C#", "Dapr"]
 }

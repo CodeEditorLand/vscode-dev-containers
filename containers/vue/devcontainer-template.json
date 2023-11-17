@@ -24,7 +24,5 @@
 			"default": "16"
 		}
 	},
-	"platforms": [
-		"Javascript"
-	]
+	"platforms": ["Javascript"]
 }

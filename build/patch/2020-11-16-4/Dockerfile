@@ -7,7 +7,7 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/universal@sha256:153ee
 FROM ${ORIGINAL_IMAGE}
 
 RUN sudo apt-get update \
-    && sudo apt-get upgrade -y libxml2 \
-    && sudo apt-get autoremove -y \
-    && sudo apt-get clean -y \
-    && sudo rm -rf /var/lib/apt/lists/*
+	&& sudo apt-get upgrade -y libxml2 \
+	&& sudo apt-get autoremove -y \
+	&& sudo apt-get clean -y \
+	&& sudo rm -rf /var/lib/apt/lists/*

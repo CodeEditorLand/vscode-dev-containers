@@ -21,7 +21,5 @@
 			"default": "debian-11"
 		}
 	},
-	"platforms": [
-		"Bash"
-	]
+	"platforms": ["Bash"]
 }
