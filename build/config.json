@@ -226,7 +226,7 @@
 		},
 		"PHP": {
 			"versionCommand": "php --version | grep -oP 'PHP\\s\\K[0-9][^\\s]+'",
-			"downloadUrl": "https://xdebug.org/"
+			"downloadUrl":"https://xdebug.org/"
 		},
 		"Java": {
 			"versionCommand": "java --version | grep -oP 'openjdk\\s+\\K[0-9]+\\.[0-9]+\\.[0-9]+'",

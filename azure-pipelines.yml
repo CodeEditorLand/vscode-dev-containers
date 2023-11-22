@@ -1,13 +1,13 @@
 pool:
-    vmImage: ubuntu-latest
+  vmImage: ubuntu-latest
 
 trigger:
-    - main
+- main
 
 variables:
-    Codeql.Enabled: true
+  Codeql.Enabled: true
 
 steps:
-    - task: ComponentGovernanceComponentDetection@0
-      inputs:
-          ignoreDirectories: "containers,repository-containers,container-templates,script-library"
+- task: ComponentGovernanceComponentDetection@0
+  inputs:
+    ignoreDirectories: 'containers,repository-containers,container-templates,script-library'

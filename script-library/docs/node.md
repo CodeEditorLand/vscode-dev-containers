@@ -1,16 +1,12 @@
-**IMPORTANT NOTE: We're starting to migrate contents of this repo to the
-[devcontainers org](https://github.com/devcontainers), as part of the work on
-the [open dev container specification](https://containers.dev).**
+**IMPORTANT NOTE: We're starting to migrate contents of this repo to the [devcontainers org](https://github.com/devcontainers), as part of the work on the [open dev container specification](https://containers.dev).**
 
-**We've currently migrated the `node` Feature to
-[devcontainers/features/src/node](https://github.com/devcontainers/features/tree/main/src/node).**
+**We've currently migrated the `node` Feature to [devcontainers/features/src/node](https://github.com/devcontainers/features/tree/main/src/node).**
 
-**For more details, you can review the
-[announcement issue](https://github.com/microsoft/vscode-dev-containers/issues/1589).**
+**For more details, you can review the [announcement issue](https://github.com/microsoft/vscode-dev-containers/issues/1589).**
 
 # Node.js Install Script
 
-_Installs Node.js, nvm, yarn, and needed dependencies._
+*Installs Node.js, nvm, yarn, and needed dependencies.*
 
 **Script status**: Stable
 
@@ -35,20 +31,19 @@ Or as a feature:
 }
 ```
 
-| Argument                   | Feature option        | Default                | Description                                                                                                                                                                                                                                                 |
-| -------------------------- | --------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Location to install nvm    |                       | `/usr/local/share/nvm` | Location to install the [Node Version Manager (nvm)](http://nvm.sh) along with Node.js and Node modules.                                                                                                                                                    |
-| Node version to install    | `version`             | `lts`                  | Node.js version to install. Use `none` to skip installing anything and just install nvm and yarn.                                                                                                                                                           |
-| Non-root user              |                       | `automatic`            | Specifies a user in the container other than root that will use Node.js. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`. |
-| Add to rc files flag       |                       | `true`                 | A `true`/`false` flag that indicates whether sourcing the nvm script should be added to `/etc/bash.bashrc` and `/etc/zsh/zshrc`.                                                                                                                            |
-| Install node-gyp deps flag | `nodeGypDependencies` | `true`                 | A `true`/`false` flag that indicates whether the script should check for key requirements for node-gyp (python, make, gcc) and install them if missing.                                                                                                     |
+|Argument|Feature option|Default|Description|
+|--------|--------------|-------|-----------|
+|Location to install nvm| | `/usr/local/share/nvm`| Location to install the [Node Version Manager (nvm)](http://nvm.sh) along with Node.js and Node modules. |
+|Node version to install| `version` | `lts`| Node.js version to install. Use `none` to skip installing anything and just install nvm and yarn. |
+|Non-root user| | `automatic`| Specifies a user in the container other than root that will use Node.js. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`. |
+| Add to rc files flag | | `true` | A `true`/`false` flag that indicates whether sourcing the nvm script should be added to `/etc/bash.bashrc` and `/etc/zsh/zshrc`. |
+| Install node-gyp deps flag | `nodeGypDependencies` | `true` | A `true`/`false` flag that indicates whether the script should check for key requirements for node-gyp (python, make, gcc) and install them if missing. |
 
 ## Usage
 
 ### Feature use
 
-To install these capabilities in your primary dev container, reference it in
-`devcontainer.json` as follows:
+To install these capabilities in your primary dev container, reference it in `devcontainer.json` as follows:
 
 ```json
 "features": {
@@ -59,9 +54,7 @@ To install these capabilities in your primary dev container, reference it in
 }
 ```
 
-If you have already built your development container, run the **Rebuild
-Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> +
-<kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
+If you have already built your development container, run the **Rebuild Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
 
 ### Script use
 
@@ -79,10 +72,7 @@ Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> +
 
 ### Using nvm from a Dockerfile or postCreateCommand
 
-Certain operations like `postCreateCommand` run non-interactive, non-login
-shells. Unfortunately, `nvm` is really particular that it needs to be "sourced"
-before it is used - which can only be done from interactive or login shells (via
-an rc or profile file).
+Certain operations like `postCreateCommand` run non-interactive, non-login shells. Unfortunately, `nvm` is really particular that it needs to be "sourced" before it is used - which can only be done from interactive or login shells (via an rc or profile file).
 
 Try doing the following instead:
 

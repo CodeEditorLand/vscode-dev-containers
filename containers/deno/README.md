@@ -31,9 +31,9 @@ _Develop Deno applications. Includes the latest Deno runtime and extension._
 3. Press <kbd>F1</kbd> select and **Add Development Container Configuration
    Files...** command for **Remote-Containers** or **Codespaces**.
 
-    > **Note:** If needed, you can drag-and-drop the `.devcontainer` folder from
-    > this sub-folder in a locally cloned copy of this repository into the VS
-    > Code file explorer instead of using the command.
+   > **Note:** If needed, you can drag-and-drop the `.devcontainer` folder from
+   > this sub-folder in a locally cloned copy of this repository into the VS
+   > Code file explorer instead of using the command.
 
 4. Select this definition. You may also need to select **Show All
    Definitions...** for it to appear.
@@ -58,9 +58,9 @@ steps:
    to open a new terminal.
 1. Run the following command to execute a simple application.
 
-    ```bash
-    deno run -A https://deno.land/std/examples/welcome.ts
-    ```
+   ```bash
+   deno run -A https://deno.land/std/examples/welcome.ts
+   ```
 
 1. You should see "Welcome to Deno 🦕" in the Debug Console after the program
    executes.

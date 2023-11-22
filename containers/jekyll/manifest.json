@@ -9,21 +9,24 @@
 			"2.7-bullseye": ["linux/amd64", "linux/arm64"],
 			"2.7-buster": ["linux/amd64"]
 		},
-		"tags": ["jekyll:${VERSION}-${VARIANT}"],
+		"tags": [
+			"jekyll:${VERSION}-${VARIANT}"
+		],
 		"variantTags": {
-			"2.7-bullseye": ["jekyll:${VERSION}", "jekyll:${VERSION}-bullseye"],
-			"2.7-buster": ["jekyll:${VERSION}-buster"]
+			"2.7-bullseye": [ 
+				"jekyll:${VERSION}", 
+				"jekyll:${VERSION}-bullseye" 
+			],
+			"2.7-buster": [ "jekyll:${VERSION}-buster" ]
 		}
 	},
 	"dependencies": {
 		"image": "mcr.microsoft.com/vscode/devcontainers/ruby:${VARIANT}",
 		"imageLink": "https://github.com/microsoft/vscode-dev-containers",
-		"debian": [
-			{
-				"cgIgnore": false,
-				"name": "yarn"
-			}
-		],
+		"debian": [{
+			"cgIgnore": false,
+			"name": "yarn"
+		}],
 		"git": {
 			"Oh My Zsh!": "/home/vscode/.oh-my-zsh",
 			"nvm": "/usr/local/share/nvm",
@@ -38,7 +41,7 @@
 			"jekyll",
 			"github-pages"
 		],
-		"other": {
+		"other":{
 			"rvm": null
 		},
 		"languages": {

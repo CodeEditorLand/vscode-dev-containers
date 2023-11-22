@@ -2,14 +2,13 @@
 
 > **Note:** This is a community contributed and maintained script.
 
-_Adds [fish shell](https://github.com/fish-shell/fish-shell) to a container._
+*Adds [fish shell](https://github.com/fish-shell/fish-shell) to a container.*
 
 **Script status**: Stable
 
 **OS support**: Debian 9+, Ubuntu 16.04+.
 
-**Maintainer:** [@andreiborisov](https://github.com/andreiborisov),
-[@eitsupi](https://github.com/eitsupi)
+**Maintainer:** [@andreiborisov](https://github.com/andreiborisov), [@eitsupi](https://github.com/eitsupi)
 
 ## Syntax
 
@@ -34,8 +33,7 @@ Or as a feature:
 
 ### Feature use
 
-To install these capabilities in your primary dev container, reference it in
-`devcontainer.json` as follows:
+To install these capabilities in your primary dev container, reference it in `devcontainer.json` as follows:
 
 ```json
 "features": {

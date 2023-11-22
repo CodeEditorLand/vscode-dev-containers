@@ -25,8 +25,8 @@ ARG PATCH_SCRIPT="\
     "
 
 RUN echo "${PATCH_SCRIPT}" \
-	&& if [ "$(id -u)" -ne 0 ]; then
-		sudo bash -c "${PATCH_SCRIPT}"
-	else
-		bash -c "${PATCH_SCRIPT}"
-	fi
+    && if [ "$(id -u)" -ne 0 ]; then \
+        sudo bash -c "${PATCH_SCRIPT}"; \
+    else \
+        bash -c "${PATCH_SCRIPT}"; \
+    fi
