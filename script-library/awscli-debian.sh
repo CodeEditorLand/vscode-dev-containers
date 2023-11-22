@@ -44,42 +44,41 @@ YLZATHZKTJyiqA==
 -----END PGP PUBLIC KEY BLOCK-----"
 
 if [ "$(id -u)" -ne 0 ]; then
-    echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-    exit 1
+	echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+	exit 1
 fi
 
 # Get central common setting
 get_common_setting() {
-    if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
-        common_settings_file_loaded=true
-    fi
-    if [ -f "/tmp/vsdc-settings.env" ]; then
-        local multi_line=""
-        if [ "$2" = "true" ]; then multi_line="-z"; fi
-        local result="$(grep ${multi_line} -oP "$1=\"?\K[^\"]+" /tmp/vsdc-settings.env | tr -d '\0')"
-        if [ ! -z "${result}" ]; then declare -g $1="${result}"; fi
-    fi
-    echo "$1=${!1}"
+	if [ "${common_settings_file_loaded}" != "true" ]; then
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
+		common_settings_file_loaded=true
+	fi
+	if [ -f "/tmp/vsdc-settings.env" ]; then
+		local multi_line=""
+		if [ "$2" = "true" ]; then multi_line="-z"; fi
+		local result="$(grep ${multi_line} -oP "$1=\"?\K[^\"]+" /tmp/vsdc-settings.env | tr -d '\0')"
+		if [ ! -z "${result}" ]; then declare -g $1="${result}"; fi
+	fi
+	echo "$1=${!1}"
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
-    if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
-        echo "Running apt-get update..."
-        apt-get update
-    else
-        echo "Skipping apt-get update."
-    fi
+apt_get_update_if_needed() {
+	if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
+		echo "Running apt-get update..."
+		apt-get update
+	else
+		echo "Skipping apt-get update."
+	fi
 }
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
-        apt_get_update_if_needed
-        apt-get -y install --no-install-recommends "$@"
-    fi
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
+		apt_get_update_if_needed
+		apt-get -y install --no-install-recommends "$@"
+	fi
 }
 
 export DEBIAN_FRONTEND=noninteractive
@@ -87,52 +86,53 @@ export DEBIAN_FRONTEND=noninteractive
 check_packages curl ca-certificates gnupg2 dirmngr unzip
 
 verify_aws_cli_gpg_signature() {
-    local filePath=$1
-    local sigFilePath=$2
+	local filePath=$1
+	local sigFilePath=$2
 
-    get_common_setting AWSCLI_GPG_KEY
-    get_common_setting AWSCLI_GPG_KEY_MATERIAL true
-    local awsGpgKeyring=aws-cli-public-key.gpg
+	get_common_setting AWSCLI_GPG_KEY
+	get_common_setting AWSCLI_GPG_KEY_MATERIAL true
+	local awsGpgKeyring=aws-cli-public-key.gpg
 
-    echo "${AWSCLI_GPG_KEY_MATERIAL}" | gpg --dearmor > "./${awsGpgKeyring}"
-    gpg --batch --quiet --no-default-keyring --keyring "./${awsGpgKeyring}" --verify "${sigFilePath}" "${filePath}"
-    local status=$?
+	echo "${AWSCLI_GPG_KEY_MATERIAL}" | gpg --dearmor > "./${awsGpgKeyring}"
+	gpg --batch --quiet --no-default-keyring --keyring "./${awsGpgKeyring}" --verify "${sigFilePath}" "${filePath}"
+	local status=$?
 
-    rm "./${awsGpgKeyring}"
+	rm "./${awsGpgKeyring}"
 
-    return ${status}
+	return ${status}
 }
 
 install() {
-    local scriptZipFile=awscli.zip
-    local scriptSigFile=awscli.sig
+	local scriptZipFile=awscli.zip
+	local scriptSigFile=awscli.sig
 
-    # See Linux install docs at https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-    if [ "${AWSCLI_VERSION}" != "latest" ]; then
-        local versionStr=-${AWSCLI_VERSION}
-    fi
-    architecture=$(dpkg --print-architecture)
-    case "${architecture}" in
-        amd64) architectureStr=x86_64 ;;
-        arm64) architectureStr=aarch64 ;;
-        *)
-            echo "AWS CLI does not support machine architecture '$architecture'. Please use an x86-64 or ARM64 machine."
-            exit 1
-    esac
-    local scriptUrl=https://awscli.amazonaws.com/awscli-exe-linux-${architectureStr}${versionStr}.zip
-    curl "${scriptUrl}" -o "${scriptZipFile}"
-    curl "${scriptUrl}.sig" -o "${scriptSigFile}"
+	# See Linux install docs at https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+	if [ "${AWSCLI_VERSION}" != "latest" ]; then
+		local versionStr=-${AWSCLI_VERSION}
+	fi
+	architecture=$(dpkg --print-architecture)
+	case "${architecture}" in
+		amd64) architectureStr=x86_64 ;;
+		arm64) architectureStr=aarch64 ;;
+		*)
+			echo "AWS CLI does not support machine architecture '$architecture'. Please use an x86-64 or ARM64 machine."
+			exit 1
+			;;
+	esac
+	local scriptUrl=https://awscli.amazonaws.com/awscli-exe-linux-${architectureStr}${versionStr}.zip
+	curl "${scriptUrl}" -o "${scriptZipFile}"
+	curl "${scriptUrl}.sig" -o "${scriptSigFile}"
 
-    verify_aws_cli_gpg_signature "$scriptZipFile" "$scriptSigFile"
-    if (( $? > 0 )); then
-        echo "Could not verify GPG signature of AWS CLI install script. Make sure you provided a valid version."
-        exit 1
-    fi
+	verify_aws_cli_gpg_signature "$scriptZipFile" "$scriptSigFile"
+	if (($? > 0)); then
+		echo "Could not verify GPG signature of AWS CLI install script. Make sure you provided a valid version."
+		exit 1
+	fi
 
-    unzip "${scriptZipFile}"
-    ./aws/install
+	unzip "${scriptZipFile}"
+	./aws/install
 
-    rm -rf ./aws
+	rm -rf ./aws
 }
 
 echo "(*) Installing AWS CLI..."
