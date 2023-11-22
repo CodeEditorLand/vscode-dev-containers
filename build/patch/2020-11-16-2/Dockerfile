@@ -7,7 +7,7 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/cpp@sha256:2379aebcd72
 FROM ${ORIGINAL_IMAGE}
 
 RUN apt-get update \
-    && apt-get upgrade -y curl \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+	&& apt-get upgrade -y curl \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
+	&& rm -rf /var/lib/apt/lists/*

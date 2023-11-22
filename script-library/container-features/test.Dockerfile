@@ -6,8 +6,8 @@ USER root
 COPY . /tmp/build-features/
 
 RUN cd /tmp/build-features \
-&& chmod +x ./install.sh \
-&& ./install.sh
+	&& chmod +x ./install.sh \
+	&& ./install.sh
 
 #{containerEnv}
 

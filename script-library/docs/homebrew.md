@@ -2,7 +2,7 @@
 
 > **Note:** This is a community contributed and maintained script.
 
-*Adds Homebrew to a container.*
+_Adds Homebrew to a container._
 
 **Script status**: Stable
 
@@ -27,18 +27,19 @@ Or as a feature:
 }
 ```
 
-|Argument| Feature option |Default|Description|
-|--------|----------------|-------|-----------|
-|Non-root user| | `automatic`| Specifies a user in the container other than root that will use Homebrew. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`. |
-| Add to rc files flag | | `true` | A `true`/`false` flag that indicates whether the `PATH` should be updated via `/etc/bash.bashrc` and `/etc/zsh/zshrc`. |
-| Use shallow clone flag | `shallow` | `false` | A `true`/`false` flag that indicates whether the script should install Homebrew using shallow clone. Shallow clone allows significantly reduce installation size at the expense of not being able to run `brew update` meaning the package index will be frozen at the moment of image creation. |
-| BREW_PREFIX | | `/home/linuxbrew/.linuxbrew` | Location to install Homebrew. Please note that changing this setting will prevent you from using some of the precompiled binaries and therefore isn't recommended. |
+| Argument               | Feature option | Default                      | Description                                                                                                                                                                                                                                                                                      |
+| ---------------------- | -------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Non-root user          |                | `automatic`                  | Specifies a user in the container other than root that will use Homebrew. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`.                                     |
+| Add to rc files flag   |                | `true`                       | A `true`/`false` flag that indicates whether the `PATH` should be updated via `/etc/bash.bashrc` and `/etc/zsh/zshrc`.                                                                                                                                                                           |
+| Use shallow clone flag | `shallow`      | `false`                      | A `true`/`false` flag that indicates whether the script should install Homebrew using shallow clone. Shallow clone allows significantly reduce installation size at the expense of not being able to run `brew update` meaning the package index will be frozen at the moment of image creation. |
+| BREW_PREFIX            |                | `/home/linuxbrew/.linuxbrew` | Location to install Homebrew. Please note that changing this setting will prevent you from using some of the precompiled binaries and therefore isn't recommended.                                                                                                                               |
 
 ## Usage
 
 ### Feature use
 
-You can use this script for your primary dev container by adding it to the `features` property in `devcontainer.json`.
+You can use this script for your primary dev container by adding it to the
+`features` property in `devcontainer.json`.
 
 ```json
 "features": {
@@ -49,13 +50,16 @@ You can use this script for your primary dev container by adding it to the `feat
 }
 ```
 
-If you have already built your development container, run the **Rebuild Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
+If you have already built your development container, run the **Rebuild
+Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> +
+<kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
 
 ### Script use
 
 Usage:
 
-1. Add [`homebrew-debian.sh`](../homebrew-debian.sh) to `.devcontainer/library-scripts`
+1. Add [`homebrew-debian.sh`](../homebrew-debian.sh) to
+   `.devcontainer/library-scripts`
 
 2. Add the following to your `.devcontainer/Dockerfile`:
 

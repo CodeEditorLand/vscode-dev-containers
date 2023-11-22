@@ -6,8 +6,8 @@
 ARG ORIGINAL_IMAGE=devcon.azurecr.io/public/vscode/devcontainers/base:bionic
 FROM ${ORIGINAL_IMAGE}
 
-RUN apt-get update  \
-    && apt-get upgrade -y systemd \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+	&& apt-get upgrade -y systemd \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
+	&& rm -rf /var/lib/apt/lists/*
