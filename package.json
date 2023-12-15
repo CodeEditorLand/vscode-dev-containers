@@ -1,7 +1,7 @@
 {
   "name": "vscode-dev-containers",
   "version": "0.0.1",
-  "private": "false",
+  "private": false,
   "description": "VS Code Dev Containers: Definitions and Templates",
   "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
   "bugs": {
