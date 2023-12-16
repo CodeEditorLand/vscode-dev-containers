@@ -23,7 +23,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -31,7 +31,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -39,7 +39,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
 	USERNAME=root
 fi
 
@@ -47,10 +47,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/bash.bashrc
+			echo -e "$1" >>/etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/zsh/zshrc
+			echo -e "$1" >>/etc/zsh/zshrc
 		fi
 	fi
 }
@@ -67,7 +67,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" > /dev/null 2>&1; then
+	if ! dpkg -s "$@" >/dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -84,7 +84,7 @@ sdk_install() {
 	# Blank will install latest stable version
 	if [ "${requested_version}" = "lts" ] || [ "${requested_version}" = "default" ]; then
 		requested_version=""
-	elif echo "${requested_version}" | grep -oE "${full_version_check}" > /dev/null 2>&1; then
+	elif echo "${requested_version}" | grep -oE "${full_version_check}" >/dev/null 2>&1; then
 		echo "${requested_version}"
 	else
 		local regex="${prefix}\\K[0-9]+\\.[0-9]+\\.[0-9]+${suffix}"
@@ -96,7 +96,7 @@ sdk_install() {
 			requested_version="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
 			set -e
 		fi
-		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" > /dev/null 2>&1; then
+		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" >/dev/null 2>&1; then
 			echo -e "Version $2 not found. Available versions:\n${version_list}" >&2
 			exit 1
 		fi
@@ -112,7 +112,7 @@ check_packages curl ca-certificates zip unzip sed
 # Install sdkman if not installed
 if [ ! -d "${SDKMAN_DIR}" ]; then
 	# Create sdkman group, dir, and set sticky bit
-	if ! cat /etc/group | grep -e "^sdkman:" > /dev/null 2>&1; then
+	if ! cat /etc/group | grep -e "^sdkman:" >/dev/null 2>&1; then
 		groupadd -r sdkman
 	fi
 	usermod -a -G sdkman ${USERNAME}

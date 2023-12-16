@@ -9,8 +9,8 @@ FROM ${ORIGINAL_IMAGE}
 RUN apt-get update \
 	&& apt-get upgrade -y util-linux gnupg2 libgnutls[0-9][0-9] \
 	&& if dpkg -s libssl1.0.0 2> /dev/null; then
-		apt-get upgrade -y libssl1.0.0
-	fi \
+apt-get upgrade -y libssl1.0.0
+fi \
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*

@@ -5,13 +5,13 @@ detect_user() {
 	if [ "${!user_variable_name}" = "auto" ] || [ "${!user_variable_name}" = "automatic" ]; then
 		declare -g ${user_variable_name}=""
 		for current_user in ${possible_users[@]}; do
-			if id -u "${current_user}" > /dev/null 2>&1; then
+			if id -u "${current_user}" >/dev/null 2>&1; then
 				declare -g ${user_variable_name}="${current_user}"
 				break
 			fi
 		done
 	fi
-	if [ "${!user_variable_name}" = "" ] || [ "${!user_variable_name}" = "none" ] || ! id -u "${!user_variable_name}" > /dev/null 2>&1; then
+	if [ "${!user_variable_name}" = "" ] || [ "${!user_variable_name}" = "none" ] || ! id -u "${!user_variable_name}" >/dev/null 2>&1; then
 		declare -g ${user_variable_name}=root
 	fi
 }
@@ -34,7 +34,7 @@ oryx_install() {
 			requested_version="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
 			set -e
 		fi
-		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" > /dev/null 2>&1; then
+		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" >/dev/null 2>&1; then
 			echo -e "(!) Oryx does not support ${platform} version $2\nValid values:\n${version_list}" >&2
 			return 1
 		fi
@@ -49,7 +49,7 @@ oryx_install() {
 	fi
 	# Update library path add to conf
 	if [ "${ldconfig_folder}" != "none" ]; then
-		echo "/opt/${platform}/${requested_version}/lib" >> "/etc/ld.so.conf.d/${platform}.conf"
+		echo "/opt/${platform}/${requested_version}/lib" >>"/etc/ld.so.conf.d/${platform}.conf"
 		ldconfig
 	fi
 }
@@ -65,7 +65,7 @@ sdk_install() {
 	# Blank will install latest stable version
 	if [ "${requested_version}" = "lts" ] || [ "${requested_version}" = "default" ]; then
 		requested_version=""
-	elif echo "${requested_version}" | grep -oE "${full_version_check}" > /dev/null 2>&1; then
+	elif echo "${requested_version}" | grep -oE "${full_version_check}" >/dev/null 2>&1; then
 		echo "${requested_version}"
 	else
 		local regex="${prefix}\\K[0-9]+\\.[0-9]+\\.[0-9]+${suffix}"
@@ -77,7 +77,7 @@ sdk_install() {
 			requested_version="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
 			set -e
 		fi
-		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" > /dev/null 2>&1; then
+		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" >/dev/null 2>&1; then
 			echo -e "Version $2 not found. Available versions:\n${version_list}" >&2
 			exit 1
 		fi
@@ -89,10 +89,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/bash.bashrc
+			echo -e "$1" >>/etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/zsh/zshrc
+			echo -e "$1" >>/etc/zsh/zshrc
 		fi
 	fi
 }
@@ -100,7 +100,7 @@ updaterc() {
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -126,7 +126,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -174,7 +174,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -193,7 +193,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" > /dev/null 2>&1; then
+	if ! dpkg -s "$@" >/dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi

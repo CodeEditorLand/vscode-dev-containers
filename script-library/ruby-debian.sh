@@ -32,7 +32,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -40,7 +40,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -48,7 +48,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
 	USERNAME=root
 fi
 
@@ -56,10 +56,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/bash.bashrc
+			echo -e "$1" >>/etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/zsh/zshrc
+			echo -e "$1" >>/etc/zsh/zshrc
 		fi
 	fi
 }
@@ -67,7 +67,7 @@ updaterc() {
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -93,7 +93,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -141,7 +141,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -160,7 +160,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" > /dev/null 2>&1; then
+	if ! dpkg -s "$@" >/dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -179,7 +179,7 @@ fi
 check_packages curl ca-certificates software-properties-common build-essential gnupg2 libreadline-dev \
 	procps dirmngr gawk autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev \
 	libsqlite3-dev libtool libyaml-dev pkg-config sqlite3 zlib1g-dev libgmp-dev libssl-dev
-if ! type git > /dev/null 2>&1; then
+if ! type git >/dev/null 2>&1; then
 	apt_get_update_if_needed
 	apt-get -y install --no-install-recommends git
 fi
@@ -215,7 +215,7 @@ else
 		fi
 	fi
 	# Create rvm group as a system group to reduce the odds of conflict with local user UIDs
-	if ! cat /etc/group | grep -e "^rvm:" > /dev/null 2>&1; then
+	if ! cat /etc/group | grep -e "^rvm:" >/dev/null 2>&1; then
 		groupadd -r rvm
 	fi
 	# Install rvm

@@ -7,26 +7,26 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/javascript-node@sha256
 FROM ${ORIGINAL_IMAGE}
 
 ARG PACKAGE_LIST="\
-sudo \
-linux-libc-dev \
-libp11-kit0 \
-"
+	sudo \
+	linux-libc-dev \
+	libp11-kit0 \
+	"
 
 # Script to iterate through the above list and update packages
 ARG PATCH_SCRIPT="\
-    export DEBIAN_FRONTEND=noninteractive \
-    && if type yarn > /dev/null 2>&1; then curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT); fi \
-    && apt-get update \
-    && echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
-        echo \"Checking \$PKG...\" \
-        && if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then apt-get install -yq --only-upgrade --no-install-recommends \$PKG; fi; \
-    done \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
-    "
+	export DEBIAN_FRONTEND=noninteractive \
+	&& if type yarn > /dev/null 2>&1; then curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT); fi \
+	&& apt-get update \
+	&& echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
+	echo \"Checking \$PKG...\" \
+	&& if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then apt-get install -yq --only-upgrade --no-install-recommends \$PKG; fi; \
+	done \
+	&& apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+	"
 
 RUN echo "${PATCH_SCRIPT}" \
 	&& if [ "$(id -u)" -ne 0 ]; then
-		sudo bash -c "${PATCH_SCRIPT}"
-	else
-		bash -c "${PATCH_SCRIPT}"
-	fi
+sudo bash -c "${PATCH_SCRIPT}"
+else
+bash -c "${PATCH_SCRIPT}"
+fi

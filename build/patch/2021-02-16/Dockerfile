@@ -7,31 +7,31 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/javascript-node@sha256
 FROM ${ORIGINAL_IMAGE}
 
 ARG PACKAGE_LIST="\
-libonig-dev \
-libonig4 \
-libonig4-dbg \
-dnsmasq \
-dnsmasq-base \
-dnsmasq-utils \
-tar \
-"
+	libonig-dev \
+	libonig4 \
+	libonig4-dbg \
+	dnsmasq \
+	dnsmasq-base \
+	dnsmasq-utils \
+	tar \
+	"
 
 # Script to iterate through the above list and update packages
 ARG PATCH_SCRIPT="\
-    export DEBIAN_FRONTEND=noninteractive \
-    && apt-get update \
-    && echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
-        echo \"(*) Checking \$PKG...\" \
-        && if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then \
-            echo \"(*) Updating \$PKG...\" \
-            && apt-get install -yq --only-upgrade --no-install-recommends \$PKG; \
-        fi; \
-    done \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*"
+	export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get update \
+	&& echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
+	echo \"(*) Checking \$PKG...\" \
+	&& if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then \
+	echo \"(*) Updating \$PKG...\" \
+	&& apt-get install -yq --only-upgrade --no-install-recommends \$PKG; \
+	fi; \
+	done \
+	&& apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*"
 
 RUN echo "${PATCH_SCRIPT}" \
 	&& if [ "$(id -u)" -ne 0 ]; then
-		sudo bash -c "${PATCH_SCRIPT}"
-	else
-		bash -c "${PATCH_SCRIPT}"
-	fi
+sudo bash -c "${PATCH_SCRIPT}"
+else
+bash -c "${PATCH_SCRIPT}"
+fi

@@ -28,7 +28,7 @@ echo "Starting installation of Rust (${RUST_VERSION})"
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -36,7 +36,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -44,14 +44,14 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
 	USERNAME=root
 fi
 
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -90,7 +90,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -104,7 +104,7 @@ check_nightly_version_formatting() {
 
 	local version_date=$(echo ${requested_version} | sed -e "s/^nightly-//")
 
-	date -d ${version_date} &> /dev/null
+	date -d ${version_date} &>/dev/null
 	if [ $? != 0 ]; then
 		echo -e "Invalid nightly version for ${variable_name} value: ${requested_version}\nNightly version should be in the format nightly-YYYY-MM-DD" >&2
 		exit 1
@@ -120,10 +120,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/bash.bashrc
+			echo -e "$1" >>/etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >> /etc/zsh/zshrc
+			echo -e "$1" >>/etc/zsh/zshrc
 		fi
 	fi
 }
@@ -141,7 +141,7 @@ apt_get_update_if_needed() {
 export DEBIAN_FRONTEND=noninteractive
 
 # Install curl, lldb, python3-minimal,libpython and rust dependencies if missing
-if ! dpkg -s curl ca-certificates gnupg2 lldb python3-minimal gcc libc6-dev > /dev/null 2>&1; then
+if ! dpkg -s curl ca-certificates gnupg2 lldb python3-minimal gcc libc6-dev >/dev/null 2>&1; then
 	apt_get_update_if_needed
 	apt-get -y install --no-install-recommends curl ca-certificates gcc libc6-dev
 	apt-get -y install lldb python3-minimal libpython3.?
@@ -150,21 +150,21 @@ fi
 architecture="$(dpkg --print-architecture)"
 download_architecture="${architecture}"
 case ${download_architecture} in
-	amd64)
-		download_architecture="x86_64"
-		;;
-	arm64)
-		download_architecture="aarch64"
-		;;
-	*)
-		echo "(!) Architecture ${architecture} not supported."
-		exit 1
-		;;
+amd64)
+	download_architecture="x86_64"
+	;;
+arm64)
+	download_architecture="aarch64"
+	;;
+*)
+	echo "(!) Architecture ${architecture} not supported."
+	exit 1
+	;;
 esac
 
 # Install Rust
 umask 0002
-if ! cat /etc/group | grep -e "^rustlang:" > /dev/null 2>&1; then
+if ! cat /etc/group | grep -e "^rustlang:" >/dev/null 2>&1; then
 	groupadd -r rustlang
 fi
 usermod -a -G rustlang "${USERNAME}"
@@ -172,13 +172,13 @@ mkdir -p "${CARGO_HOME}" "${RUSTUP_HOME}"
 chown :rustlang "${RUSTUP_HOME}" "${CARGO_HOME}"
 chmod g+r+w+s "${RUSTUP_HOME}" "${CARGO_HOME}"
 
-if [ "${RUST_VERSION}" = "none" ] || type rustup > /dev/null 2>&1; then
+if [ "${RUST_VERSION}" = "none" ] || type rustup >/dev/null 2>&1; then
 	echo "Rust already installed. Skipping..."
 else
 	# Non-latest version of rust specified.
 	if [ "${RUST_VERSION}" != "latest" ] && [ "${RUST_VERSION}" != "lts" ] && [ "${RUST_VERSION}" != "stable" ]; then
 		# Find version using soft match
-		if ! type git > /dev/null 2>&1; then
+		if ! type git >/dev/null 2>&1; then
 			apt_get_update_if_needed
 			apt-get -y install --no-install-recommends git
 		fi
@@ -214,7 +214,7 @@ rustup component add rls rust-analysis rust-src rustfmt clippy 2>&1
 
 # Add CARGO_HOME, RUSTUP_HOME and bin directory into bashrc/zshrc files (unless disabled)
 updaterc "$(
-	cat << EOF
+	cat <<EOF
 export RUSTUP_HOME="${RUSTUP_HOME}"
 export CARGO_HOME="${CARGO_HOME}"
 if [[ "\${PATH}" != *"\${CARGO_HOME}/bin"* ]]; then export PATH="\${CARGO_HOME}/bin:\${PATH}"; fi
