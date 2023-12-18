@@ -32,7 +32,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
+		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -40,14 +40,14 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
 	USERNAME=root
 fi
 
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -71,7 +71,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -104,7 +104,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -116,7 +116,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 check_packages apt-transport-https curl ca-certificates gnupg2 dirmngr
-if ! type git >/dev/null 2>&1; then
+if ! type git > /dev/null 2>&1; then
 	apt_get_update_if_needed
 	apt-get -y install git
 fi
@@ -153,15 +153,15 @@ if [ "${USE_MOBY}" = "true" ]; then
 
 	# Import key safely and import Microsoft apt repo
 	get_common_setting MICROSOFT_GPG_KEYS_URI
-	curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor >/usr/share/keyrings/microsoft-archive-keyring.gpg
-	echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/microsoft.list
+	curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor > /usr/share/keyrings/microsoft-archive-keyring.gpg
+	echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/microsoft.list
 else
 	# Name of proprietary engine package
 	cli_package_name="docker-ce-cli"
 
 	# Import key safely and import Docker apt repo
-	curl -fsSL https://download.docker.com/linux/${ID}/gpg | gpg --dearmor >/usr/share/keyrings/docker-archive-keyring.gpg
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" >/etc/apt/sources.list.d/docker.list
+	curl -fsSL https://download.docker.com/linux/${ID}/gpg | gpg --dearmor > /usr/share/keyrings/docker-archive-keyring.gpg
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" > /etc/apt/sources.list.d/docker.list
 fi
 
 # Refresh apt lists
@@ -189,7 +189,7 @@ else
 fi
 
 # Install Docker / Moby CLI if not already installed
-if type docker >/dev/null 2>&1; then
+if type docker > /dev/null 2>&1; then
 	echo "Docker / Moby CLI already installed."
 else
 	if [ "${USE_MOBY}" = "true" ]; then
@@ -202,7 +202,7 @@ else
 fi
 
 # Install Docker Compose if not already installed  and is on a supported architecture
-if type docker-compose >/dev/null 2>&1; then
+if type docker-compose > /dev/null 2>&1; then
 	echo "Docker Compose already installed."
 else
 	TARGET_COMPOSE_ARCH="$(uname -m)"
@@ -211,7 +211,7 @@ else
 	fi
 	if [ "${TARGET_COMPOSE_ARCH}" != "x86_64" ]; then
 		# Use pip to get a version that runns on this architecture
-		if ! dpkg -s python3-minimal python3-pip libffi-dev python3-venv >/dev/null 2>&1; then
+		if ! dpkg -s python3-minimal python3-pip libffi-dev python3-venv > /dev/null 2>&1; then
 			apt_get_update_if_needed
 			apt-get -y install python3-minimal python3-pip libffi-dev python3-venv
 		fi
@@ -221,7 +221,7 @@ else
 		export PYTHONUSERBASE=/tmp/pip-tmp
 		export PIP_CACHE_DIR=/tmp/pip-tmp/cache
 		pipx_bin=pipx
-		if ! type pipx >/dev/null 2>&1; then
+		if ! type pipx > /dev/null 2>&1; then
 			pip3 install --disable-pip-version-check --no-cache-dir --user pipx
 			pipx_bin=/tmp/pip-tmp/bin/pipx
 		fi
@@ -239,7 +239,7 @@ fi
 # Install docker-compose switch if not already installed - https://github.com/docker/compose-switch#manual-installation
 current_v1_compose_path="$(which docker-compose)"
 target_v1_compose_path="$(dirname "${current_v1_compose_path}")/docker-compose-v1"
-if ! type compose-switch >/dev/null 2>&1; then
+if ! type compose-switch > /dev/null 2>&1; then
 	echo "(*) Installing compose-switch..."
 	compose_switch_version="latest"
 	find_version_from_git_tags compose_switch_version "https://github.com/docker/compose-switch"
@@ -272,7 +272,7 @@ fi
 
 # Add a stub if not adding non-root user access, user is root
 if [ "${ENABLE_NONROOT_DOCKER}" = "false" ] || [ "${USERNAME}" = "root" ]; then
-	echo -e '#!/usr/bin/env bash\nexec "$@"' >/usr/local/share/docker-init.sh
+	echo -e '#!/usr/bin/env bash\nexec "$@"' > /usr/local/share/docker-init.sh
 	chmod +x /usr/local/share/docker-init.sh
 	exit 0
 fi
@@ -286,12 +286,12 @@ DOCKER_GID="$(grep -oP '^docker:x:\K[^:]+' /etc/group)"
 
 # If enabling non-root access and specified user is found, setup socat and add script
 chown -h "${USERNAME}":root "${TARGET_SOCKET}"
-if ! dpkg -s socat >/dev/null 2>&1; then
+if ! dpkg -s socat > /dev/null 2>&1; then
 	apt_get_update_if_needed
 	apt-get -y install socat
 fi
-tee /usr/local/share/docker-init.sh >/dev/null \
-	<<EOF
+tee /usr/local/share/docker-init.sh > /dev/null \
+	<< EOF
 #!/usr/bin/env bash
 #-------------------------------------------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.

@@ -5,7 +5,7 @@ cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Verify we're on a supported OS
 . /etc/os-release
 if [ "${ID}" != "debian" ] && [ "${ID_LIKE}" != "debian" ]; then
-	cat <<EOF
+	cat << EOF
 
 *********** Unsupported operating system "${ID}" detected ***********
 
@@ -45,10 +45,10 @@ while IFS= read -r feature_line; do
 		else
 			# Execute script and create a marker with the script args
 			./${script_command}
-			echo "${script_command}" >"${feature_marker}"
+			echo "${script_command}" > "${feature_marker}"
 		fi
 	fi
-done <./feature-scripts.env
+done < ./feature-scripts.env
 
 # Clean up
 apt-get autoremove -y

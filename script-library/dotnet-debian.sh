@@ -41,7 +41,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user.
@@ -49,7 +49,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in "${POSSIBLE_USERS[@]}"; do
-		if id -u "${CURRENT_USER}" >/dev/null 2>&1; then
+		if id -u "${CURRENT_USER}" > /dev/null 2>&1; then
 			USERNAME="${CURRENT_USER}"
 			break
 		fi
@@ -57,7 +57,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
 	USERNAME=root
 fi
 
@@ -80,7 +80,7 @@ trap cleanup EXIT
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -97,10 +97,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/bash.bashrc
+			echo -e "$1" >> /etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/zsh/zshrc
+			echo -e "$1" >> /etc/zsh/zshrc
 		fi
 	fi
 }
@@ -117,7 +117,7 @@ apt_get_update_if_needed() {
 
 # Check if packages are installed and installs them if not.
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -128,12 +128,12 @@ get_architecture_name_for_target_os() {
 	local architecture
 	architecture="$(uname -m)"
 	case $architecture in
-	x86_64) architecture="x64" ;;
-	aarch64 | armv8*) architecture="arm64" ;;
-	*)
-		err "Architecture ${architecture} unsupported"
-		exit 1
-		;;
+		x86_64) architecture="x64" ;;
+		aarch64 | armv8*) architecture="arm64" ;;
+		*)
+			err "Architecture ${architecture} unsupported"
+			exit 1
+			;;
 	esac
 
 	echo "${architecture}"
@@ -202,8 +202,8 @@ install_using_apt() {
 
 	# Import key safely and import Microsoft apt repo
 	get_common_setting MICROSOFT_GPG_KEYS_URI
-	curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor >/usr/share/keyrings/microsoft-archive-keyring.gpg
-	echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/microsoft.list
+	curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor > /usr/share/keyrings/microsoft-archive-keyring.gpg
+	echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/microsoft.list
 	apt-get update
 
 	if [ "${DOTNET_VERSION}" = "latest" ] || [ "${DOTNET_VERSION}" = "lts" ]; then
@@ -315,7 +315,7 @@ install_using_dotnet_releases_url() {
 
 	# Setup the access group and add the user to it.
 	umask 0002
-	if ! cat /etc/group | grep -e "^${ACCESS_GROUP}:" >/dev/null 2>&1; then
+	if ! cat /etc/group | grep -e "^${ACCESS_GROUP}:" > /dev/null 2>&1; then
 		groupadd -r "${ACCESS_GROUP}"
 	fi
 	usermod -a -G "${ACCESS_GROUP}" "${USERNAME}"
@@ -338,7 +338,7 @@ install_using_dotnet_releases_url() {
 	tar -xzf "${TMP_DIR}/${DOTNET_DOWNLOAD_NAME}" -C "${TARGET_DOTNET_ROOT}" --strip-components=1
 
 	updaterc "$(
-		cat <<EOF
+		cat << EOF
     export DOTNET_ROOT="${TARGET_DOTNET_ROOT}"
     if [[ "\${PATH}" != *"\${DOTNET_ROOT}"* ]]; then export PATH="\${PATH}:\${DOTNET_ROOT}"; fi
 EOF

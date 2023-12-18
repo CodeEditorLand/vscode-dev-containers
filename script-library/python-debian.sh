@@ -33,7 +33,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -41,7 +41,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
+		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -49,7 +49,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
 	USERNAME=root
 fi
 
@@ -57,10 +57,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/bash.bashrc
+			echo -e "$1" >> /etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/zsh/zshrc
+			echo -e "$1" >> /etc/zsh/zshrc
 		fi
 	fi
 }
@@ -68,7 +68,7 @@ updaterc() {
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -95,7 +95,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -143,7 +143,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -168,7 +168,7 @@ oryx_install() {
 			requested_version="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
 			set -e
 		fi
-		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" >/dev/null 2>&1; then
+		if [ -z "${requested_version}" ] || ! echo "${version_list}" | grep "^${requested_version//./\\.}$" > /dev/null 2>&1; then
 			echo -e "(!) Oryx does not support ${platform} version $2\nValid values:\n${version_list}" >&2
 			return 1
 		fi
@@ -183,7 +183,7 @@ oryx_install() {
 	fi
 	# Update library path add to conf
 	if [ "${ldconfig_folder}" != "none" ]; then
-		echo "/opt/${platform}/${requested_version}/lib" >>"/etc/ld.so.conf.d/${platform}.conf"
+		echo "/opt/${platform}/${requested_version}/lib" >> "/etc/ld.so.conf.d/${platform}.conf"
 		ldconfig
 	fi
 }
@@ -200,7 +200,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -216,7 +216,7 @@ install_from_source() {
 	check_packages curl gdb ca-certificates gnupg2 tar make gcc libssl-dev zlib1g-dev libncurses5-dev \
 		libbz2-dev libreadline-dev libreadline6-dev libxml2-dev xz-utils libgdbm-dev libgdbm-compat-dev tk-dev dirmngr \
 		libxmlsec1-dev libsqlite3-dev libffi-dev liblzma-dev lzma lzma-dev uuid-dev
-	if ! type git >/dev/null 2>&1; then
+	if ! type git > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends git
 	fi
@@ -288,7 +288,7 @@ if [ "${PYTHON_VERSION}" != "none" ]; then
 		check_packages python3 python3-doc python3-pip python3-venv python3-dev python3-tk
 		PYTHON_INSTALL_PATH="/usr"
 		should_install_from_source=false
-	elif [ "$(dpkg --print-architecture)" = "amd64" ] && [ "${USE_ORYX_IF_AVAILABLE}" = "true" ] && type oryx >/dev/null 2>&1; then
+	elif [ "$(dpkg --print-architecture)" = "amd64" ] && [ "${USE_ORYX_IF_AVAILABLE}" = "true" ] && type oryx > /dev/null 2>&1; then
 		install_using_oryx || should_install_from_source=true
 	else
 		should_install_from_source=true
@@ -309,7 +309,7 @@ export PIPX_BIN_DIR="${PIPX_HOME}/bin"
 export PATH="${PYTHON_INSTALL_PATH}/bin:${PIPX_BIN_DIR}:${PATH}"
 
 # Create pipx group, dir, and set sticky bit
-if ! cat /etc/group | grep -e "^pipx:" >/dev/null 2>&1; then
+if ! cat /etc/group | grep -e "^pipx:" > /dev/null 2>&1; then
 	groupadd -r pipx
 fi
 usermod -a -G pipx ${USERNAME}
@@ -329,13 +329,13 @@ echo "Installing Python tools..."
 export PYTHONUSERBASE=/tmp/pip-tmp
 export PIP_CACHE_DIR=/tmp/pip-tmp/cache
 pipx_path=""
-if ! type pipx >/dev/null 2>&1; then
+if ! type pipx > /dev/null 2>&1; then
 	pip3 install --disable-pip-version-check --no-cache-dir --user pipx 2>&1
 	/tmp/pip-tmp/bin/pipx install --pip-args=--no-cache-dir pipx
 	pipx_path="/tmp/pip-tmp/bin/"
 fi
 for util in ${DEFAULT_UTILS[@]}; do
-	if ! type ${util} >/dev/null 2>&1; then
+	if ! type ${util} > /dev/null 2>&1; then
 		${pipx_path}pipx install --system-site-packages --pip-args '--no-cache-dir --force-reinstall' ${util}
 	else
 		echo "${util} already installed. Skipping."
@@ -344,7 +344,7 @@ done
 rm -rf /tmp/pip-tmp
 
 updaterc "$(
-	cat <<EOF
+	cat << EOF
 export PIPX_HOME="${PIPX_HOME}"
 export PIPX_BIN_DIR="${PIPX_BIN_DIR}"
 if [[ "\${PATH}" != *"\${PIPX_BIN_DIR}"* ]]; then export PATH="\${PATH}:\${PIPX_BIN_DIR}"; fi

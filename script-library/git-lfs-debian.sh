@@ -28,7 +28,7 @@ fi
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -67,7 +67,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -84,7 +84,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -117,7 +117,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -133,8 +133,8 @@ install_using_apt() {
 	fi
 	# Install
 	get_common_setting GIT_LFS_ARCHIVE_GPG_KEY_URI
-	curl -sSL "${GIT_LFS_ARCHIVE_GPG_KEY_URI}" | gpg --dearmor >/usr/share/keyrings/gitlfs-archive-keyring.gpg
-	echo -e "deb [arch=${architecture} signed-by=/usr/share/keyrings/gitlfs-archive-keyring.gpg] https://packagecloud.io/github/git-lfs/${ID} ${VERSION_CODENAME} main\ndeb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitlfs-archive-keyring.gpg] https://packagecloud.io/github/git-lfs/${ID} ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/git-lfs.list
+	curl -sSL "${GIT_LFS_ARCHIVE_GPG_KEY_URI}" | gpg --dearmor > /usr/share/keyrings/gitlfs-archive-keyring.gpg
+	echo -e "deb [arch=${architecture} signed-by=/usr/share/keyrings/gitlfs-archive-keyring.gpg] https://packagecloud.io/github/git-lfs/${ID} ${VERSION_CODENAME} main\ndeb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitlfs-archive-keyring.gpg] https://packagecloud.io/github/git-lfs/${ID} ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/git-lfs.list
 
 	if ! (apt-get update && apt-get install -yq git-lfs${version_suffix}); then
 		rm -f /etc/apt/sources.list.d/git-lfs.list
@@ -156,7 +156,7 @@ install_using_github() {
 	# Verify file
 	curl -sSL -o "sha256sums.asc" "https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/sha256sums.asc"
 	receive_gpg_keys GIT_LFS_CHECKSUM_GPG_KEYS
-	gpg -q --decrypt "sha256sums.asc" >sha256sums
+	gpg -q --decrypt "sha256sums.asc" > sha256sums
 	sha256sum --ignore-missing -c "sha256sums"
 	# Extract and install
 	echo "Validated release artifact integrity."
@@ -181,7 +181,7 @@ export DEBIAN_FRONTEND=noninteractive
 # Install git, curl, gpg, dirmngr and debian-archive-keyring if missing
 . /etc/os-release
 check_packages curl ca-certificates gnupg2 dirmngr apt-transport-https
-if ! type git >/dev/null 2>&1; then
+if ! type git > /dev/null 2>&1; then
 	apt_get_update_if_needed
 	apt-get -y install --no-install-recommends git
 fi

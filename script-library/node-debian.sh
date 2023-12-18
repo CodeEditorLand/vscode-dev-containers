@@ -25,7 +25,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -33,7 +33,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
+		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -41,7 +41,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	if [ "${USERNAME}" = "" ]; then
 		USERNAME=root
 	fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
 	USERNAME=root
 fi
 
@@ -49,10 +49,10 @@ updaterc() {
 	if [ "${UPDATE_RC}" = "true" ]; then
 		echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
 		if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/bash.bashrc
+			echo -e "$1" >> /etc/bash.bashrc
 		fi
 		if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-			echo -e "$1" >>/etc/zsh/zshrc
+			echo -e "$1" >> /etc/zsh/zshrc
 		fi
 	fi
 }
@@ -69,7 +69,7 @@ apt_get_update_if_needed() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update_if_needed
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -82,12 +82,12 @@ export DEBIAN_FRONTEND=noninteractive
 check_packages apt-transport-https curl ca-certificates tar gnupg2 dirmngr
 
 # Install yarn
-if type yarn >/dev/null 2>&1; then
+if type yarn > /dev/null 2>&1; then
 	echo "Yarn already installed."
 else
 	# Import key safely (new method rather than deprecated apt-key approach) and install
-	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor >/usr/share/keyrings/yarn-archive-keyring.gpg
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" >/etc/apt/sources.list.d/yarn.list
+	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
 	apt-get update
 	apt-get -y install --no-install-recommends yarn
 fi
@@ -112,7 +112,7 @@ if [ -d "${NVM_DIR}" ]; then
 fi
 
 # Create nvm group, nvm dir, and set sticky bit
-if ! cat /etc/group | grep -e "^nvm:" >/dev/null 2>&1; then
+if ! cat /etc/group | grep -e "^nvm:" > /dev/null 2>&1; then
 	groupadd -r nvm
 fi
 umask 0002
@@ -121,7 +121,7 @@ mkdir -p ${NVM_DIR}
 chown :nvm ${NVM_DIR}
 chmod g+s ${NVM_DIR}
 su ${USERNAME} -c "$(
-	cat <<EOF
+	cat << EOF
     set -e
     umask 0002
     # Do not update profile - we'll do this manually
@@ -138,7 +138,7 @@ EOF
 # Update rc files
 if [ "${UPDATE_RC}" = "true" ]; then
 	updaterc "$(
-		cat <<EOF
+		cat << EOF
 export NVM_DIR="${NVM_DIR}"
 [ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
 [ -s "\$NVM_DIR/bash_completion" ] && . "\$NVM_DIR/bash_completion"
@@ -150,16 +150,16 @@ fi
 if [ "${INSTALL_TOOLS_FOR_NODE_GYP}" = "true" ]; then
 	echo "Verifying node-gyp OS requirements..."
 	to_install=""
-	if ! type make >/dev/null 2>&1; then
+	if ! type make > /dev/null 2>&1; then
 		to_install="${to_install} make"
 	fi
-	if ! type gcc >/dev/null 2>&1; then
+	if ! type gcc > /dev/null 2>&1; then
 		to_install="${to_install} gcc"
 	fi
-	if ! type g++ >/dev/null 2>&1; then
+	if ! type g++ > /dev/null 2>&1; then
 		to_install="${to_install} g++"
 	fi
-	if ! type python3 >/dev/null 2>&1; then
+	if ! type python3 > /dev/null 2>&1; then
 		to_install="${to_install} python3-minimal"
 	fi
 	if [ ! -z "${to_install}" ]; then

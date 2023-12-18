@@ -13,7 +13,7 @@ cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 chmod +x java-debian.sh
 
 is_jdk_8="false"
-if echo "${JAVA_VERSION}" | grep -E '^8([\s\.]|$)' >/dev/null 2>&1; then
+if echo "${JAVA_VERSION}" | grep -E '^8([\s\.]|$)' > /dev/null 2>&1; then
 	is_jdk_8="true"
 fi
 
@@ -28,7 +28,7 @@ if [ "${is_jdk_8}" = "true" ]; then
 	username=""
 	possible_users=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for current_user in ${possible_users[@]}; do
-		if id -u ${current_user} >/dev/null 2>&1; then
+		if id -u ${current_user} > /dev/null 2>&1; then
 			username=${current_user}
 			break
 		fi

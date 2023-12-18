@@ -27,7 +27,7 @@ fi
 # Get central common setting
 get_common_setting() {
 	if [ "${common_settings_file_loaded}" != "true" ]; then
-		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
+		curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2> /dev/null || echo "Could not download settings file. Skipping."
 		common_settings_file_loaded=true
 	fi
 	if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -49,7 +49,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -97,7 +97,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -118,7 +118,7 @@ receive_gpg_keys() {
 	export GNUPGHOME="/tmp/tmp-gnupg"
 	mkdir -p ${GNUPGHOME}
 	chmod 700 ${GNUPGHOME}
-	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
+	echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
 	# GPG key download sometimes fails for some reason and retrying fixes it.
 	local retry_count=0
 	local gpg_ok="false"
@@ -146,7 +146,7 @@ apt_get_update() {
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-	if ! dpkg -s "$@" >/dev/null 2>&1; then
+	if ! dpkg -s "$@" > /dev/null 2>&1; then
 		apt_get_update
 		apt-get -y install --no-install-recommends "$@"
 	fi
@@ -178,7 +178,7 @@ find_version_from_git_tags() {
 			set -e
 		fi
 	fi
-	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
+	if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
 		echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
 		exit 1
 	fi
@@ -206,7 +206,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install curl, apt-transport-https, curl, gpg, or dirmngr, git if missing
 check_packages curl ca-certificates apt-transport-https dirmngr gnupg2
-if ! type git >/dev/null 2>&1; then
+if ! type git > /dev/null 2>&1; then
 	apt_get_update
 	apt-get -y install --no-install-recommends git
 fi
@@ -228,7 +228,7 @@ else
 	# Import key safely (new method rather than deprecated apt-key approach) and install
 	. /etc/os-release
 	receive_gpg_keys GITHUB_CLI_ARCHIVE_GPG_KEY /usr/share/keyrings/githubcli-archive-keyring.gpg
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" >/etc/apt/sources.list.d/github-cli.list
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 	apt-get update
 	apt-get -y install "gh${version_suffix}"
 	rm -rf "/tmp/gh/gnupg"

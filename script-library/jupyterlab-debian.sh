@@ -21,7 +21,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
 	USERNAME=""
 	POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
 	for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-		if id -u ${CURRENT_USER} >/dev/null 2>&1; then
+		if id -u ${CURRENT_USER} > /dev/null 2>&1; then
 			USERNAME=${CURRENT_USER}
 			break
 		fi
@@ -53,11 +53,11 @@ addToJupyterConfig() {
 	test -f ${JUPYTER_CONFIG} || sudoUserIf touch ${JUPYTER_CONFIG}
 
 	# Don't write the same line more than once
-	grep -q ${1} ${JUPYTER_CONFIG} || echo ${1} >>${JUPYTER_CONFIG}
+	grep -q ${1} ${JUPYTER_CONFIG} || echo ${1} >> ${JUPYTER_CONFIG}
 }
 
 # Make sure that Python is available
-if ! ${PYTHON} --version >/dev/null; then
+if ! ${PYTHON} --version > /dev/null; then
 	echo "You need to install Python before installing JupyterLab."
 	exit 1
 fi
