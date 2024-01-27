@@ -7,22 +7,22 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/universal@sha256:924b0
 FROM ${ORIGINAL_IMAGE}
 
 ARG PACKAGE_LIST="\
-	moby-cli \
-	moby-engine \
-	"
+moby-cli \
+moby-engine \
+"
 
 ARG PATCH_SCRIPT="\
-	export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
-	&& echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
-	echo \"Checking \$PKG...\" \
-	&& if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then apt-get install -yq --no-install-recommends --only-upgrade \$PKG; fi; \
-	done \
-	&& apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*"
+    export DEBIAN_FRONTEND=noninteractive \
+    && apt-get update \
+    && echo \"${PACKAGE_LIST}\" | tr ' ' '\n' | while read PKG; do \
+        echo \"Checking \$PKG...\" \
+        && if [ \"\$PKG\" != '' ] && dpkg -s \$PKG >/dev/null 2>&1; then apt-get install -yq --no-install-recommends --only-upgrade \$PKG; fi; \
+    done \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*"
 
 RUN echo "${PATCH_SCRIPT}" \
-	&& if [ "$(id -u)" -ne 0 ]; then
-		sudo bash -c "${PATCH_SCRIPT}"
-	else
-		bash -c "${PATCH_SCRIPT}"
-	fi
+    && if [ "$(id -u)" -ne 0 ]; then \
+        sudo bash -c "${PATCH_SCRIPT}"; \
+    else \
+        bash -c "${PATCH_SCRIPT}"; \
+    fi

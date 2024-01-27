@@ -7,14 +7,14 @@ ARG ORIGINAL_IMAGE=mcr.microsoft.com/vscode/devcontainers/universal@sha256:36418
 FROM ${ORIGINAL_IMAGE}
 
 RUN sudo apt-get update  \
-	&& export DEBIAN_FRONTEND=noninteractive \
-	# Always upgrade git
-	&& sudo apt-get upgrade -y git \
-	# See if libssl-dev installed, upgrade if so
-	&& if dpkg -s libssl-dev 2>/dev/null; then \
-	sudo apt-get upgrade -y libssl-dev libssl1.1; \
-	fi \
-	&& sudo apt-get autoremove -y \
-	&& sudo apt-get clean -y \
-	&& sudo rm -rf /var/lib/apt/lists/*
+    && export DEBIAN_FRONTEND=noninteractive \
+    # Always upgrade git
+    && sudo apt-get upgrade -y git \
+    # See if libssl-dev installed, upgrade if so
+    && if dpkg -s libssl-dev 2>/dev/null; then \
+        sudo apt-get upgrade -y libssl-dev libssl1.1; \
+    fi \
+    && sudo apt-get autoremove -y \
+    && sudo apt-get clean -y \
+    && sudo rm -rf /var/lib/apt/lists/*
 

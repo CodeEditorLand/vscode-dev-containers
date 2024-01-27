@@ -1,17 +1,12 @@
-**IMPORTANT NOTE: We're starting to migrate contents of this repo to the
-[devcontainers org](https://github.com/devcontainers), as part of the work on
-the [open dev container specification](https://containers.dev).**
+**IMPORTANT NOTE: We're starting to migrate contents of this repo to the [devcontainers org](https://github.com/devcontainers), as part of the work on the [open dev container specification](https://containers.dev).**
 
-**We've currently migrated the `go` Feature to
-[devcontainers/features/src/go](https://github.com/devcontainers/features/tree/main/src/go).**
+**We've currently migrated the `go` Feature to [devcontainers/features/src/go](https://github.com/devcontainers/features/tree/main/src/go).**
 
-**For more details, you can review the
-[announcement issue](https://github.com/microsoft/vscode-dev-containers/issues/1589).**
+**For more details, you can review the [announcement issue](https://github.com/microsoft/vscode-dev-containers/issues/1589).**
 
 # Go (golang) Install Script
 
-_Installs Go and common Go utilities. Auto-detects latest version and installs
-needed dependencies._
+*Installs Go and common Go utilities. Auto-detects latest version and installs needed dependencies.*
 
 **Script status**: Stable
 
@@ -33,21 +28,20 @@ Or as a feature:
 }
 ```
 
-| Argument             | Feature option | Default         | Description                                                                                                                                                                                                                           |
-| -------------------- | -------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Go version           | `version`      | `latest`        | Version of Go to install. Use `latest` to install the latest released version. Partial version numbers are accepted (e.g. `1.19`).                                                                                                    |
-| GOROOT               |                | `/usr/local/go` | Location to install Go.                                                                                                                                                                                                               |
-| GOPATH               |                | `/go`           | Location to use as the `GOPATH`. Tools are installed under `${GOPATH}/bin`                                                                                                                                                            |
-| Non-root user        |                | `automatic`     | Specifies a user in the container other than root. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`. |
-| Add to rc files flag |                | `true`          | A `true`/`false` flag that indicates whether the `PATH` should be updated and `GOPATH` and `GOROOT` set via `/etc/bash.bashrc` and `/etc/zsh/zshrc`.                                                                                  |
-| Install tools flag   |                | `true`          | A `true`/`false` flag that indicates whether to install common Go utilities.                                                                                                                                                          |
+|Argument|Feature option|Default|Description|
+|--------|--------------|-------|-----------|
+|Go version|`version` | `latest`| Version of Go to install. Use `latest` to install the latest released version. Partial version numbers are accepted (e.g. `1.19`).|
+|GOROOT| | `/usr/local/go`| Location to install Go. |
+|GOPATH| | `/go`| Location to use as the `GOPATH`. Tools are installed under `${GOPATH}/bin` |
+|Non-root user| | `automatic`| Specifies a user in the container other than root. A value of `automatic` will cause the script to check for a user called `vscode`, then `node`, `codespace`, and finally a user with a UID of `1000` before falling back to `root`. |
+| Add to rc files flag | | `true` | A `true`/`false` flag that indicates whether the `PATH` should be updated and `GOPATH` and `GOROOT` set via `/etc/bash.bashrc` and `/etc/zsh/zshrc`. |
+| Install tools flag | | `true` | A `true`/`false` flag that indicates whether to install common Go utilities. |
 
 ## Usage
 
 ### Feature use
 
-To install these capabilities in your primary dev container, reference it in
-`devcontainer.json` as follows:
+To install these capabilities in your primary dev container, reference it in `devcontainer.json` as follows:
 
 ```json
 "features": {
@@ -55,9 +49,7 @@ To install these capabilities in your primary dev container, reference it in
 }
 ```
 
-If you have already built your development container, run the **Rebuild
-Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> +
-<kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
+If you have already built your development container, run the **Rebuild Container** command from the command palette (<kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> or <kbd>F1</kbd>) to pick up the change.
 
 ### Script use
 
