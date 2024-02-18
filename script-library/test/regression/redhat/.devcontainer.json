@@ -10,14 +10,14 @@
 		}
 	},
 
-	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
 	"workspaceMount": "source=${localWorkspaceFolder}/../../..,target=/workspace,type=bind",
 	"workspaceFolder": "/workspace",
 	"overrideCommand": false,
 
-	"extensions": [
-		"ms-azuretools.vscode-docker"
-	],
+	"extensions": ["ms-azuretools.vscode-docker"],
 
 	"remoteUser": "vscode"
 }

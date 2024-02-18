@@ -3,12 +3,12 @@
 	"build": {
 		"dockerfile": "../Dockerfile",
 		"context": "../../../",
-		"args": { 
+		"args": {
 			"IMAGE_TO_TEST": "mcr.microsoft.com/vscode/devcontainers/base:0-buster",
 			"DEFAULT_SHELL_TYPE": "bash"
 		}
 	},
-	"remoteUser": "vscode",	
+	"remoteUser": "vscode",
 	"userEnvProbe": "none",
 
 	"overrideCommand": false,

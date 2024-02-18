@@ -1,16 +1,38 @@
 {
-	"name": "docker_web_app",
-	"version": "1.0.0",
-	"description": "Node.js + Postgres",
-	"author": "First Last <first.last@example.com>",
-	"main": "server.js",
-	"scripts": {
-		"start": "node server.js",
-		"test": " REGRESSION_TESTING=true npm start"
-	},
-	"dependencies": {
-		"express": "^4.16.1",
-		"bluebird": "^3.5.5",
-		"pg-promise": "^10.9.1"
-	}
+  "name": "docker_web_app",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Node.js + Postgres",
+  "homepage": "https://github.com/CodeEditorLand/Environment#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/Environment/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/Environment.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Nikola R. Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bluebird": "3.5.5",
+    "express": "4.16.1",
+    "pg-promise": "10.9.1"
+  },
+  "devDependencies": {
+    "typescript-esbuild": "0.3.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

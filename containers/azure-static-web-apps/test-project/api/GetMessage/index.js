@@ -1,7 +1,7 @@
-module.exports = async function (context, req) {
-    context.res = {
-        body: {
-            text: "Hello from the API"
-        }
-    };
+module.exports = async (context, req) => {
+	context.res = {
+		body: {
+			text: "Hello from the API",
+		},
+	};
 };

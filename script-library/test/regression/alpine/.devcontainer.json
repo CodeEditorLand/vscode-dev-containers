@@ -12,5 +12,4 @@
 	"workspaceMount": "source=${localWorkspaceFolder}/../../..,target=/workspace,type=bind",
 	"workspaceFolder": "/workspace",
 	"remoteUser": "vscode"
-
 }
