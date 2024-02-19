@@ -51,7 +51,7 @@ fi
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -64,8 +64,7 @@ get_common_setting() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -76,7 +75,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -94,7 +93,7 @@ verify_aws_cli_gpg_signature() {
     get_common_setting AWSCLI_GPG_KEY_MATERIAL true
     local awsGpgKeyring=aws-cli-public-key.gpg
 
-    echo "${AWSCLI_GPG_KEY_MATERIAL}" | gpg --dearmor > "./${awsGpgKeyring}"
+    echo "${AWSCLI_GPG_KEY_MATERIAL}" | gpg --dearmor >"./${awsGpgKeyring}"
     gpg --batch --quiet --no-default-keyring --keyring "./${awsGpgKeyring}" --verify "${sigFilePath}" "${filePath}"
     local status=$?
 
@@ -113,18 +112,19 @@ install() {
     fi
     architecture=$(dpkg --print-architecture)
     case "${architecture}" in
-        amd64) architectureStr=x86_64 ;;
-        arm64) architectureStr=aarch64 ;;
-        *)
-            echo "AWS CLI does not support machine architecture '$architecture'. Please use an x86-64 or ARM64 machine."
-            exit 1
+    amd64) architectureStr=x86_64 ;;
+    arm64) architectureStr=aarch64 ;;
+    *)
+        echo "AWS CLI does not support machine architecture '$architecture'. Please use an x86-64 or ARM64 machine."
+        exit 1
+        ;;
     esac
     local scriptUrl=https://awscli.amazonaws.com/awscli-exe-linux-${architectureStr}${versionStr}.zip
     curl "${scriptUrl}" -o "${scriptZipFile}"
     curl "${scriptUrl}.sig" -o "${scriptSigFile}"
 
     verify_aws_cli_gpg_signature "$scriptZipFile" "$scriptSigFile"
-    if (( $? > 0 )); then
+    if (($? > 0)); then
         echo "Could not verify GPG signature of AWS CLI install script. Make sure you provided a valid version."
         exit 1
     fi

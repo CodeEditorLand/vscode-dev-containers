@@ -18,21 +18,21 @@ ALLOW_ALL_ORIGINS=${4:-""}
 
 # If in automatic mode, determine if a user already exists, if not use vscode
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
-    USERNAME=""
-    POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
-    for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
-            USERNAME=${CURRENT_USER}
-            break
-        fi
-    done
-    if [ "${USERNAME}" = "" ]; then
-        USERNAME=vscode
+  USERNAME=""
+  POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
+  for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
+    if id -u ${CURRENT_USER} >/dev/null 2>&1; then
+      USERNAME=${CURRENT_USER}
+      break
     fi
+  done
+  if [ "${USERNAME}" = "" ]; then
+    USERNAME=vscode
+  fi
 elif [ "${USERNAME}" = "none" ]; then
-    USERNAME=root
-    USER_UID=0
-    USER_GID=0
+  USERNAME=root
+  USER_UID=0
+  USER_GID=0
 fi
 
 # Make sure we run the command as non-root user
@@ -53,11 +53,11 @@ addToJupyterConfig() {
   test -f ${JUPYTER_CONFIG} || sudoUserIf touch ${JUPYTER_CONFIG}
 
   # Don't write the same line more than once
-  grep -q ${1} ${JUPYTER_CONFIG} || echo ${1} >> ${JUPYTER_CONFIG}
+  grep -q ${1} ${JUPYTER_CONFIG} || echo ${1} >>${JUPYTER_CONFIG}
 }
 
 # Make sure that Python is available
-if ! ${PYTHON} --version > /dev/null ; then
+if ! ${PYTHON} --version >/dev/null; then
   echo "You need to install Python before installing JupyterLab."
   exit 1
 fi

@@ -27,7 +27,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -35,7 +35,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     if [ "${USERNAME}" = "" ]; then
         USERNAME=root
     fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
     USERNAME=root
 fi
 
@@ -43,10 +43,10 @@ function updaterc() {
     if [ "${UPDATE_RC}" = "true" ]; then
         echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
         if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-            echo -e "$1" >> /etc/bash.bashrc
+            echo -e "$1" >>/etc/bash.bashrc
         fi
         if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-            echo -e "$1" >> /etc/zsh/zshrc
+            echo -e "$1" >>/etc/zsh/zshrc
         fi
     fi
 }
@@ -55,8 +55,8 @@ function updatefishconfig() {
     if [ "${UPDATE_RC}" = "true" ]; then
         echo "Updating /etc/fish/config.fish..."
         if [ -f "/etc/fish/config.fish" ]; then
-             echo -e "$1" >> /etc/fish/config.fish
-         fi
+            echo -e "$1" >>/etc/fish/config.fish
+        fi
     fi
 }
 
@@ -87,28 +87,28 @@ if ! dpkg -s \
     sudo \
     tzdata \
     uuid-runtime \
-    > /dev/null 2>&1; then
-        if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
-            apt-get update
-        fi
-        apt-get -y install --no-install-recommends \
-            bzip2 \
-            ca-certificates \
-            curl \
-            file \
-            fonts-dejavu-core \
-            g++ \
-            git \
-            less \
-            libz-dev \
-            locales \
-            make \
-            netbase \
-            openssh-client \
-            patch \
-            sudo \
-            tzdata \
-            uuid-runtime
+    >/dev/null 2>&1; then
+    if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
+        apt-get update
+    fi
+    apt-get -y install --no-install-recommends \
+        bzip2 \
+        ca-certificates \
+        curl \
+        file \
+        fonts-dejavu-core \
+        g++ \
+        git \
+        less \
+        libz-dev \
+        locales \
+        make \
+        netbase \
+        openssh-client \
+        patch \
+        sudo \
+        tzdata \
+        uuid-runtime
 fi
 
 # Install Homebrew
@@ -133,7 +133,8 @@ ln -s "${BREW_PREFIX}/Homebrew/bin/brew" "${BREW_PREFIX}/bin"
 chown -R ${USERNAME} "${BREW_PREFIX}"
 
 # Add Homebrew binaries into PATH in bashrc/zshrc/config.fish files (unless disabled)
-updaterc "$(cat << EOF
+updaterc "$(
+    cat <<EOF
 if [[ "\${PATH}" != *"${BREW_PREFIX}/bin"* ]]; then export PATH="${BREW_PREFIX}/bin:\${PATH}"; fi
 if [[ "\${PATH}" != *"${BREW_PREFIX}/sbin"* ]]; then export PATH="${BREW_PREFIX}/sbin:\${PATH}"; fi
 EOF

@@ -73,7 +73,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -81,12 +81,13 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     if [ "${USERNAME}" = "" ]; then
         USERNAME=root
     fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
     USERNAME=root
 fi
 # Add default Fluxbox config files if none are already present
-fluxbox_apps="$(cat \
-<< 'EOF'
+fluxbox_apps="$(
+    cat \
+        <<'EOF'
 [transient] (role=GtkFileChooserDialog)
   [Dimensions]	{70% 70%}
   [Position]	(CENTER)	{0 0}
@@ -94,8 +95,9 @@ fluxbox_apps="$(cat \
 EOF
 )"
 
-fluxbox_init="$(cat \
-<< 'EOF'
+fluxbox_init="$(
+    cat \
+        <<'EOF'
 session.configVersion:	13
 session.menuFile:	~/.fluxbox/menu
 session.keyFile: ~/.fluxbox/keys
@@ -109,8 +111,9 @@ session.screen0.workspaceNames: One,
 EOF
 )"
 
-fluxbox_menu="$(cat \
-<< 'EOF'
+fluxbox_menu="$(
+    cat \
+        <<'EOF'
 [begin] (  Application Menu  )
     [exec] (File Manager) { nautilus ~ } <>
     [exec] (Text Editor) { mousepad } <>
@@ -139,20 +142,18 @@ copy_fluxbox_config() {
     mkdir -p "${target_dir}/.fluxbox"
     touch "${target_dir}/.Xmodmap"
     if [ ! -e "${target_dir}/.fluxbox/apps" ]; then
-        echo "${fluxbox_apps}" > "${target_dir}/.fluxbox/apps"
+        echo "${fluxbox_apps}" >"${target_dir}/.fluxbox/apps"
     fi
     if [ ! -e "${target_dir}/.fluxbox/init" ]; then
-        echo "${fluxbox_init}" > "${target_dir}/.fluxbox/init"
+        echo "${fluxbox_init}" >"${target_dir}/.fluxbox/init"
     fi
     if [ ! -e "${target_dir}/.fluxbox/menu" ]; then
-        echo "${fluxbox_menu}" > "${target_dir}/.fluxbox/menu"
+        echo "${fluxbox_menu}" >"${target_dir}/.fluxbox/menu"
     fi
 }
 
-
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -163,7 +164,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -185,7 +186,7 @@ if [[ -z $(apt-cache --names-only search ^tilix$) ]]; then
         apt-get install -y --no-install-recommends apt-transport-https software-properties-common
         add-apt-repository -y ppa:webupd8team/terminix
     elif [ "${VERSION_CODENAME}" = "stretch" ]; then
-        echo "deb http://deb.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
+        echo "deb http://deb.debian.org/debian stretch-backports main" >/etc/apt/sources.list.d/stretch-backports.list
     fi
     apt-get update
     if [[ -z $(apt-cache --names-only search ^tilix$) ]]; then
@@ -200,20 +201,20 @@ fi
 # Install X11, fluxbox and VS Code dependencies
 check_packages ${package_list}
 
-# On newer versions of Ubuntu (22.04), 
+# On newer versions of Ubuntu (22.04),
 # we need an additional package that isn't provided in earlier versions
-if ! type vncpasswd > /dev/null 2>&1; then
+if ! type vncpasswd >/dev/null 2>&1; then
     check_packages ${package_list_additional}
 fi
 
 # Install Emoji font if available in distro - Available in Debian 10+, Ubuntu 18.04+
-if dpkg-query -W fonts-noto-color-emoji > /dev/null 2>&1 && ! dpkg -s fonts-noto-color-emoji > /dev/null 2>&1; then
+if dpkg-query -W fonts-noto-color-emoji >/dev/null 2>&1 && ! dpkg -s fonts-noto-color-emoji >/dev/null 2>&1; then
     apt-get -y install --no-install-recommends fonts-noto-color-emoji
 fi
 
 # Check at least one locale exists
-if ! grep -o -E '^\s*en_US.UTF-8\s+UTF-8' /etc/locale.gen > /dev/null; then
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+if ! grep -o -E '^\s*en_US.UTF-8\s+UTF-8' /etc/locale.gen >/dev/null; then
+    echo "en_US.UTF-8 UTF-8" >>/etc/locale.gen
     locale-gen
 fi
 
@@ -238,7 +239,7 @@ if [ "${INSTALL_NOVNC}" = "true" ] && [ ! -d "/usr/local/novnc" ]; then
     rm -f /tmp/websockify-install.zip /tmp/novnc-install.zip
 
     # Install noVNC dependencies and use them.
-    if ! dpkg -s python3-minimal python3-numpy > /dev/null 2>&1; then
+    if ! dpkg -s python3-minimal python3-numpy >/dev/null 2>&1; then
         apt-get -y install --no-install-recommends python3-minimal python3-numpy
     fi
     sed -i -E 's/^python /python3 /' /usr/local/novnc/websockify-${WEBSOCKETIFY_VERSION}/run
@@ -248,7 +249,7 @@ fi
 mkdir -p /var/run/dbus /usr/local/etc/vscode-dev-containers/
 
 # Script to change resolution of desktop
-cat << EOF > /usr/local/bin/set-resolution
+cat <<EOF >/usr/local/bin/set-resolution
 #!/bin/bash
 RESOLUTION=\${1:-\${VNC_RESOLUTION:-1920x1080}}
 DPI=\${2:-\${VNC_DPI:-96}}
@@ -285,7 +286,7 @@ echo -e "\nSuccess!\n"
 EOF
 
 # Container ENTRYPOINT script
-cat << EOF > /usr/local/share/desktop-init.sh
+cat <<EOF >/usr/local/share/desktop-init.sh
 #!/bin/bash
 
 user_name="${USERNAME}"
@@ -383,7 +384,7 @@ exec "\$@"
 log "** SCRIPT EXIT **"
 EOF
 
-echo "${VNC_PASSWORD}" | vncpasswd -f > /usr/local/etc/vscode-dev-containers/vnc-passwd
+echo "${VNC_PASSWORD}" | vncpasswd -f >/usr/local/etc/vscode-dev-containers/vnc-passwd
 chmod +x /usr/local/share/desktop-init.sh /usr/local/bin/set-resolution
 
 # Set up fluxbox config
@@ -393,7 +394,7 @@ if [ "${USERNAME}" != "root" ]; then
     chown -R ${USERNAME} /home/${USERNAME}/.Xmodmap /home/${USERNAME}/.fluxbox
 fi
 
-cat << EOF
+cat <<EOF
 
 
 You now have a working desktop! Connect to in one of the following ways:
@@ -406,4 +407,3 @@ In both cases, use the password "${VNC_PASSWORD}" when connecting
 (*) Done!
 
 EOF
-

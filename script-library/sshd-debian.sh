@@ -29,7 +29,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -37,13 +37,13 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     if [ "${USERNAME}" = "" ]; then
         USERNAME=root
     fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
     USERNAME=root
 fi
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt-get update -y
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -65,10 +65,10 @@ elif [ "${NEW_PASSWORD}" != "skip" ]; then
 fi
 
 if [ $(getent group ssh) ]; then
-  echo "'ssh' group already exists."
+    echo "'ssh' group already exists."
 else
-  echo "adding 'ssh' group, as it does not already exist."
-  groupadd ssh
+    echo "adding 'ssh' group, as it does not already exist."
+    groupadd ssh
 fi
 
 # Add user to ssh group
@@ -85,7 +85,8 @@ sed -i -E "s/#*\s*Port\s+.+/Port ${SSHD_PORT}/g" /etc/ssh/sshd_config
 sed -i -E "s/#?\s*UsePAM\s+.+/UsePAM yes/g" /etc/ssh/sshd_config
 
 # Script to store variables that exist at the time the ENTRYPOINT is fired
-store_env_script="$(cat << 'EOF'
+store_env_script="$(
+    cat <<'EOF'
 # Wire in codespaces secret processing to zsh if present (since may have been added to image after script was run)
 if [ -f  /etc/zsh/zlogin ] && ! grep '/etc/profile.d/00-restore-secrets.sh' /etc/zsh/zlogin > /dev/null 2>&1; then
     echo -e "if [ -f /etc/profile.d/00-restore-secrets.sh ]; then . /etc/profile.d/00-restore-secrets.sh; fi\n$(cat /etc/zsh/zlogin 2>/dev/null || echo '')" | sudoIf tee /etc/zsh/zlogin > /dev/null
@@ -94,7 +95,8 @@ EOF
 )"
 
 # Script to ensure login shells get the latest Codespaces secrets
-restore_secrets_script="$(cat << 'EOF'
+restore_secrets_script="$(
+    cat <<'EOF'
 #!/bin/sh
 if [ "${CODESPACES}" != "true" ] || [ "${VSCDC_FIXED_SECRETS}" = "true" ] || [ ! -z "${GITHUB_CODESPACES_TOKEN}" ]; then
     # Not codespaces, already run, or secrets already in environment, so return
@@ -114,8 +116,8 @@ EOF
 )"
 
 # Write out a scripts that can be referenced as an ENTRYPOINT to auto-start sshd and fix login environments
-tee /usr/local/share/ssh-init.sh > /dev/null \
-<< 'EOF'
+tee /usr/local/share/ssh-init.sh >/dev/null \
+    <<'EOF'
 #!/usr/bin/env bash
 # This script is intended to be run as root with a container that runs as root (even if you connect with a different user)
 # However, it supports running as a user other than root if passwordless sudo is configured for that same user.
@@ -133,16 +135,16 @@ sudoIf()
 
 EOF
 if [ "${FIX_ENVIRONMENT}" = "true" ]; then
-    echo "${store_env_script}" >> /usr/local/share/ssh-init.sh
-    echo "${restore_secrets_script}" > /etc/profile.d/00-restore-secrets.sh
+    echo "${store_env_script}" >>/usr/local/share/ssh-init.sh
+    echo "${restore_secrets_script}" >/etc/profile.d/00-restore-secrets.sh
     chmod +x /etc/profile.d/00-restore-secrets.sh
     # Wire in zsh if present
-    if type zsh > /dev/null 2>&1; then
-        echo -e "if [ -f /etc/profile.d/00-restore-secrets.sh ]; then . /etc/profile.d/00-restore-secrets.sh; fi\n$(cat /etc/zsh/zlogin 2>/dev/null || echo '')" > /etc/zsh/zlogin
+    if type zsh >/dev/null 2>&1; then
+        echo -e "if [ -f /etc/profile.d/00-restore-secrets.sh ]; then . /etc/profile.d/00-restore-secrets.sh; fi\n$(cat /etc/zsh/zlogin 2>/dev/null || echo '')" >/etc/zsh/zlogin
     fi
 fi
-tee -a /usr/local/share/ssh-init.sh > /dev/null \
-<< 'EOF'
+tee -a /usr/local/share/ssh-init.sh >/dev/null \
+    <<'EOF'
 
 # ** Start SSH server **
 sudoIf /etc/init.d/ssh start 2>&1 | sudoIf tee /tmp/sshd.log > /dev/null

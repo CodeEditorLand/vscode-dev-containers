@@ -27,7 +27,7 @@ fi
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -39,7 +39,7 @@ get_common_setting() {
     echo "$1=${!1}"
 }
 
-# Import the specified key in a variable name passed in as 
+# Import the specified key in a variable name passed in as
 receive_gpg_keys() {
     get_common_setting $1
     local keys=${!1}
@@ -54,18 +54,17 @@ receive_gpg_keys() {
     export GNUPGHOME="/tmp/tmp-gnupg"
     mkdir -p ${GNUPGHOME}
     chmod 700 ${GNUPGHOME}
-    echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
+    echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
     # GPG key download sometimes fails for some reason and retrying fixes it.
     local retry_count=0
     local gpg_ok="false"
     set +e
-    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ]; 
-    do
+    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ]; do
         echo "(*) Downloading GPG key..."
-        ( echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys) 2>&1 && gpg_ok="true"
+        (echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys) 2>&1 && gpg_ok="true"
         if [ "${gpg_ok}" != "true" ]; then
             echo "(*) Failed getting key, retring in 10s..."
-            (( retry_count++ ))
+            ((retry_count++))
             sleep 10s
         fi
     done
@@ -77,8 +76,7 @@ receive_gpg_keys() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -89,7 +87,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -102,9 +100,9 @@ export DEBIAN_FRONTEND=noninteractive
 
 # If the os provided version is "good enough", just install that.
 if [ ${GIT_VERSION} = "os-provided" ] || [ ${GIT_VERSION} = "system" ]; then
-    if type git > /dev/null 2>&1; then
-      echo "Detected existing system install: $(git version)"
-      exit 0
+    if type git >/dev/null 2>&1; then
+        echo "Detected existing system install: $(git version)"
+        exit 0
     fi
 
     echo "Installing git from OS apt repository"
@@ -117,9 +115,9 @@ if ([ "${GIT_VERSION}" = "latest" ] || [ "${GIT_VERSION}" = "lts" ] || [ "${GIT_
     echo "Using PPA to install latest git..."
     check_packages apt-transport-https curl ca-certificates gnupg2 dirmngr
     receive_gpg_keys GIT_CORE_PPA_ARCHIVE_GPG_KEY /usr/share/keyrings/gitcoreppa-archive-keyring.gpg
-    echo -e "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitcoreppa-archive-keyring.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu ${VERSION_CODENAME} main\ndeb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitcoreppa-archive-keyring.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/git-core-ppa.list
+    echo -e "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitcoreppa-archive-keyring.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu ${VERSION_CODENAME} main\ndeb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitcoreppa-archive-keyring.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/git-core-ppa.list
     apt-get update
-    apt-get -y install --no-install-recommends git 
+    apt-get -y install --no-install-recommends git
     rm -rf "/tmp/tmp-gnupg"
     exit 0
 fi
@@ -130,7 +128,7 @@ check_packages build-essential curl ca-certificates tar gettext libssl-dev zlib1
 # Partial version matching
 if [ "$(echo "${GIT_VERSION}" | grep -o '\.' | wc -l)" != "2" ]; then
     requested_version="${GIT_VERSION}"
-    version_list="$(curl -sSL -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/git/git/tags" | grep -oP '"name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+"' | tr -d '"' | sort -rV )"
+    version_list="$(curl -sSL -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/git/git/tags" | grep -oP '"name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+"' | tr -d '"' | sort -rV)"
     if [ "${requested_version}" = "latest" ] || [ "${requested_version}" = "lts" ] || [ "${requested_version}" = "current" ]; then
         GIT_VERSION="$(echo "${version_list}" | head -n 1)"
     else
@@ -138,7 +136,7 @@ if [ "$(echo "${GIT_VERSION}" | grep -o '\.' | wc -l)" != "2" ]; then
         GIT_VERSION="$(echo "${version_list}" | grep -E -m 1 "^${requested_version//./\\.}([\\.\\s]|$)")"
         set -e
     fi
-    if [ -z "${GIT_VERSION}" ] || ! echo "${version_list}" | grep "^${GIT_VERSION//./\\.}$" > /dev/null 2>&1; then
+    if [ -z "${GIT_VERSION}" ] || ! echo "${version_list}" | grep "^${GIT_VERSION//./\\.}$" >/dev/null 2>&1; then
         echo "Invalid git version: ${requested_version}" >&2
         exit 1
     fi

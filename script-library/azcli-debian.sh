@@ -24,7 +24,7 @@ fi
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -37,8 +37,7 @@ get_common_setting() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -49,7 +48,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -60,7 +59,7 @@ export DEBIAN_FRONTEND=noninteractive
 # Soft version matching that resolves a version for a given package in the *current apt-cache*
 # Return value is stored in first argument (the unprocessed version)
 apt_cache_version_soft_match() {
-    
+
     # Version
     local variable_name="$1"
     local requested_version=${!variable_name}
@@ -72,13 +71,13 @@ apt_cache_version_soft_match() {
     # Ensure we've exported useful variables
     . /etc/os-release
     local architecture="$(dpkg --print-architecture)"
-    
+
     dot_escaped="${requested_version//./\\.}"
     dot_plus_escaped="${dot_escaped//+/\\+}"
     # Regex needs to handle debian package version number format: https://www.systutorials.com/docs/linux/man/5-deb-version/
     version_regex="^(.+:)?${dot_plus_escaped}([\\.\\+ ~:-]|$)"
     set +e # Don't exit if finding version fails - handle gracefully
-        fuzzy_version="$(apt-cache madison ${package_name} | awk -F"|" '{print $2}' | sed -e 's/^[ \t]*//' | grep -E -m 1 "${version_regex}")"
+    fuzzy_version="$(apt-cache madison ${package_name} | awk -F"|" '{print $2}' | sed -e 's/^[ \t]*//' | grep -E -m 1 "${version_regex}")"
     set -e
     if [ -z "${fuzzy_version}" ]; then
         echo "(!) No full or partial for package \"${package_name}\" match found in apt-cache for \"${requested_version}\" on OS ${ID} ${VERSION_CODENAME} (${architecture})."
@@ -89,7 +88,7 @@ apt_cache_version_soft_match() {
             exit 1 # Fail entire script
         else
             echo "Continuing to fallback method (if available)"
-            return 1;
+            return 1
         fi
     fi
 
@@ -104,8 +103,8 @@ install_using_apt() {
     check_packages apt-transport-https curl ca-certificates gnupg2 dirmngr
     # Import key safely (new 'signed-by' method rather than deprecated apt-key approach) and install
     get_common_setting MICROSOFT_GPG_KEYS_URI
-    curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor > /usr/share/keyrings/microsoft-archive-keyring.gpg
-    echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/azure-cli.list
+    curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor >/usr/share/keyrings/microsoft-archive-keyring.gpg
+    echo "deb [arch=${architecture} signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/azure-cli/ ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/azure-cli.list
     apt-get update
 
     if [ "${AZ_VERSION}" = "latest" ] || [ "${AZ_VERSION}" = "lts" ] || [ "${AZ_VERSION}" = "stable" ]; then
@@ -127,7 +126,7 @@ install_using_apt() {
 
 install_using_pip() {
     echo "(*) No pre-built binaries available in apt-cache. Installing via pip3."
-    if ! dpkg -s python3-minimal python3-pip libffi-dev python3-venv > /dev/null 2>&1; then
+    if ! dpkg -s python3-minimal python3-pip libffi-dev python3-venv >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install python3-minimal python3-pip libffi-dev python3-venv
     fi
@@ -137,7 +136,7 @@ install_using_pip() {
     export PYTHONUSERBASE=/tmp/pip-tmp
     export PIP_CACHE_DIR=/tmp/pip-tmp/cache
     pipx_bin=pipx
-    if ! type pipx > /dev/null 2>&1; then
+    if ! type pipx >/dev/null 2>&1; then
         pip3 install --disable-pip-version-check --no-cache-dir --user pipx
         pipx_bin=/tmp/pip-tmp/bin/pipx
     fi
@@ -150,14 +149,14 @@ install_using_pip() {
     fi
 
     set +e
-        ${pipx_bin} install --pip-args '--no-cache-dir --force-reinstall' -f azure-cli${ver}
+    ${pipx_bin} install --pip-args '--no-cache-dir --force-reinstall' -f azure-cli${ver}
 
-        # Fail gracefully
-        if [ "$?" != 0 ]; then
-            echo "Could not install azure-cli${ver} via pip"
-            rm -rf /tmp/pip-tmp
-            return 1
-        fi
+    # Fail gracefully
+    if [ "$?" != 0 ]; then
+        echo "Could not install azure-cli${ver} via pip"
+        rm -rf /tmp/pip-tmp
+        return 1
+    fi
     set -e
 }
 
@@ -166,7 +165,7 @@ echo "(*) Installing Azure CLI..."
 . /etc/os-release
 architecture="$(dpkg --print-architecture)"
 CACHED_AZURE_VERSION="${AZ_VERSION}" # In case we need to fallback to pip and the apt path has modified the AZ_VERSION variable.
-if [[ "${AZCLI_ARCHIVE_ARCHITECTURES}" = *"${architecture}"* ]] && [[  "${AZCLI_ARCHIVE_VERSION_CODENAMES}" = *"${VERSION_CODENAME}"* ]]; then
+if [[ "${AZCLI_ARCHIVE_ARCHITECTURES}" = *"${architecture}"* ]] && [[ "${AZCLI_ARCHIVE_VERSION_CODENAMES}" = *"${VERSION_CODENAME}"* ]]; then
     install_using_apt || use_pip="true"
 else
     use_pip="true"

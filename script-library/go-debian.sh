@@ -28,7 +28,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # Determine the appropriate non-root user
@@ -36,7 +36,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -44,7 +44,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     if [ "${USERNAME}" = "" ]; then
         USERNAME=root
     fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
     USERNAME=root
 fi
 
@@ -52,10 +52,10 @@ updaterc() {
     if [ "${UPDATE_RC}" = "true" ]; then
         echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
         if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
-            echo -e "$1" >> /etc/bash.bashrc
+            echo -e "$1" >>/etc/bash.bashrc
         fi
         if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
-            echo -e "$1" >> /etc/zsh/zshrc
+            echo -e "$1" >>/etc/zsh/zshrc
         fi
     fi
 }
@@ -67,7 +67,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -86,7 +86,7 @@ find_version_from_git_tags() {
             set -e
         fi
     fi
-    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
         echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
         exit 1
     fi
@@ -96,7 +96,7 @@ find_version_from_git_tags() {
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -109,8 +109,7 @@ get_common_setting() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -121,7 +120,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -131,7 +130,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install curl, tar, git, other dependencies if missing
 check_packages curl ca-certificates gnupg2 tar g++ gcc libc6-dev make pkg-config
-if ! type git > /dev/null 2>&1; then
+if ! type git >/dev/null 2>&1; then
     apt_get_update_if_needed
     apt-get -y install --no-install-recommends git
 fi
@@ -141,21 +140,24 @@ find_version_from_git_tags TARGET_GO_VERSION "https://go.googlesource.com/go" "t
 
 architecture="$(uname -m)"
 case $architecture in
-    x86_64) architecture="amd64";;
-    aarch64 | armv8*) architecture="arm64";;
-    aarch32 | armv7* | armvhf*) architecture="armv6l";;
-    i?86) architecture="386";;
-    *) echo "(!) Architecture $architecture unsupported"; exit 1 ;;
+x86_64) architecture="amd64" ;;
+aarch64 | armv8*) architecture="arm64" ;;
+aarch32 | armv7* | armvhf*) architecture="armv6l" ;;
+i?86) architecture="386" ;;
+*)
+    echo "(!) Architecture $architecture unsupported"
+    exit 1
+    ;;
 esac
 
 # Install Go
 umask 0002
-if ! cat /etc/group | grep -e "^golang:" > /dev/null 2>&1; then
+if ! cat /etc/group | grep -e "^golang:" >/dev/null 2>&1; then
     groupadd -r golang
 fi
 usermod -a -G golang "${USERNAME}"
-mkdir -p "${TARGET_GOROOT}" "${TARGET_GOPATH}" 
-if [ "${TARGET_GO_VERSION}" != "none" ] && ! type go > /dev/null 2>&1; then
+mkdir -p "${TARGET_GOROOT}" "${TARGET_GOPATH}"
+if [ "${TARGET_GO_VERSION}" != "none" ] && ! type go >/dev/null 2>&1; then
     # Use a temporary locaiton for gpg keys to avoid polluting image
     export GNUPGHOME="/tmp/tmp-gnupg"
     mkdir -p ${GNUPGHOME}
@@ -177,15 +179,15 @@ if [ "${TARGET_GO_VERSION}" != "none" ] && ! type go > /dev/null 2>&1; then
         breakfix="$(echo "${TARGET_GO_VERSION}" | grep -oP '^[0-9]+\.[0-9]+\.\K[0-9]+' 2>/dev/null || echo '')"
         # Handle Go's odd version pattern where "0" releases omit the last part
         if [ "${breakfix}" = "" ] || [ "${breakfix}" = "0" ]; then
-            ((minor=minor-1))
+            ((minor = minor - 1))
             TARGET_GO_VERSION="${major}.${minor}"
             # Look for latest version from previous minor release
             find_version_from_git_tags TARGET_GO_VERSION "https://go.googlesource.com/go" "tags/go" "." "true"
-        else 
-            ((breakfix=breakfix-1))
+        else
+            ((breakfix = breakfix - 1))
             if [ "${breakfix}" = "0" ]; then
                 TARGET_GO_VERSION="${major}.${minor}"
-            else 
+            else
                 TARGET_GO_VERSION="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -227,9 +229,9 @@ if [ "${INSTALL_GO_TOOLS}" = "true" ]; then
         export GO111MODULE=on
         go_install_command=get
         echo "Go version < 1.16, using go get."
-    fi 
+    fi
 
-    (echo "${GO_TOOLS}" | xargs -n 1 go ${go_install_command} -v )2>&1 | tee -a /usr/local/etc/vscode-dev-containers/go.log
+    (echo "${GO_TOOLS}" | xargs -n 1 go ${go_install_command} -v) 2>&1 | tee -a /usr/local/etc/vscode-dev-containers/go.log
 
     # Move Go tools into path and clean up
     mv /tmp/gotools/bin/* ${TARGET_GOPATH}/bin/
@@ -238,7 +240,8 @@ if [ "${INSTALL_GO_TOOLS}" = "true" ]; then
 fi
 
 # Add GOPATH variable and bin directory into PATH in bashrc/zshrc files (unless disabled)
-updaterc "$(cat << EOF
+updaterc "$(
+    cat <<EOF
 export GOPATH="${TARGET_GOPATH}"
 if [[ "\${PATH}" != *"\${GOPATH}/bin"* ]]; then export PATH="\${PATH}:\${GOPATH}/bin"; fi
 export GOROOT="${TARGET_GOROOT}"
@@ -252,4 +255,3 @@ find "${TARGET_GOROOT}" -type d | xargs -n 1 chmod g+s
 find "${TARGET_GOPATH}" -type d | xargs -n 1 chmod g+s
 
 echo "Done!"
-

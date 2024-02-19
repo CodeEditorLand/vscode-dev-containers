@@ -34,7 +34,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -42,7 +42,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     if [ "${USERNAME}" = "" ]; then
         USERNAME=root
     fi
-elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} > /dev/null 2>&1; then
+elif [ "${USERNAME}" = "none" ] || ! id -u ${USERNAME} >/dev/null 2>&1; then
     USERNAME=root
 fi
 
@@ -51,11 +51,10 @@ if [ "$USERNAME" = "root" ]; then
     USERHOME="/root"
 fi
 
-
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -94,7 +93,7 @@ find_version_from_git_tags() {
             set -e
         fi
     fi
-    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
         echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
         exit 1
     fi
@@ -102,8 +101,7 @@ find_version_from_git_tags() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -114,7 +112,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -125,18 +123,21 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 check_packages curl ca-certificates coreutils gnupg2 dirmngr bash-completion
-if ! type git > /dev/null 2>&1; then
+if ! type git >/dev/null 2>&1; then
     apt_get_update_if_needed
     apt-get -y install --no-install-recommends git
 fi
 
 architecture="$(uname -m)"
 case $architecture in
-    x86_64) architecture="amd64";;
-    aarch64 | armv8*) architecture="arm64";;
-    aarch32 | armv7* | armvhf*) architecture="arm";;
-    i?86) architecture="386";;
-    *) echo "(!) Architecture $architecture unsupported"; exit 1 ;;
+x86_64) architecture="amd64" ;;
+aarch64 | armv8*) architecture="arm64" ;;
+aarch32 | armv7* | armvhf*) architecture="arm" ;;
+i?86) architecture="386" ;;
+*)
+    echo "(!) Architecture $architecture unsupported"
+    exit 1
+    ;;
 esac
 
 # Install the kubectl, verify checksum
@@ -155,18 +156,18 @@ if [ "$KUBECTL_SHA256" = "automatic" ]; then
     KUBECTL_SHA256="$(curl -sSL "https://dl.k8s.io/${KUBECTL_VERSION}/bin/linux/${architecture}/kubectl.sha256")"
 fi
 ([ "${KUBECTL_SHA256}" = "dev-mode" ] || (echo "${KUBECTL_SHA256} */usr/local/bin/kubectl" | sha256sum -c -))
-if ! type kubectl > /dev/null 2>&1; then
+if ! type kubectl >/dev/null 2>&1; then
     echo '(!) kubectl installation failed!'
     exit 1
 fi
 
 # kubectl bash completion
-kubectl completion bash > /etc/bash_completion.d/kubectl
+kubectl completion bash >/etc/bash_completion.d/kubectl
 
 # kubectl zsh completion
 if [ -e "${USERHOME}}/.oh-my-zsh" ]; then
     mkdir -p "${USERHOME}/.oh-my-zsh/completions"
-    kubectl completion zsh > "${USERHOME}/.oh-my-zsh/completions/_kubectl"
+    kubectl completion zsh >"${USERHOME}/.oh-my-zsh/completions/_kubectl"
     chown -R "${USERNAME}" "${USERHOME}/.oh-my-zsh"
 fi
 
@@ -187,9 +188,9 @@ chmod 700 ${GNUPGHOME}
 get_common_setting HELM_GPG_KEYS_URI
 get_common_setting GPG_KEY_SERVERS true
 curl -sSL "${HELM_GPG_KEYS_URI}" -o /tmp/helm/KEYS
-echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
+echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
 gpg -q --import "/tmp/helm/KEYS"
-if ! gpg --verify "${tmp_helm_filename}.asc" > ${GNUPGHOME}/verify.log 2>&1; then
+if ! gpg --verify "${tmp_helm_filename}.asc" >${GNUPGHOME}/verify.log 2>&1; then
     echo "Verification failed!"
     cat /tmp/helm/gnupg/verify.log
     exit 1
@@ -197,7 +198,7 @@ fi
 if [ "${HELM_SHA256}" = "automatic" ]; then
     curl -sSL "https://get.helm.sh/${helm_filename}.sha256" -o "${tmp_helm_filename}.sha256"
     curl -sSL "https://github.com/helm/helm/releases/download/${HELM_VERSION}/${helm_filename}.sha256.asc" -o "${tmp_helm_filename}.sha256.asc"
-    if ! gpg --verify "${tmp_helm_filename}.sha256.asc" > /tmp/helm/gnupg/verify.log 2>&1; then
+    if ! gpg --verify "${tmp_helm_filename}.sha256.asc" >/tmp/helm/gnupg/verify.log 2>&1; then
         echo "Verification failed!"
         cat /tmp/helm/gnupg/verify.log
         exit 1
@@ -209,7 +210,7 @@ tar xf "${tmp_helm_filename}" -C /tmp/helm
 mv -f "/tmp/helm/linux-${architecture}/helm" /usr/local/bin/
 chmod 0755 /usr/local/bin/helm
 rm -rf /tmp/helm
-if ! type helm > /dev/null 2>&1; then
+if ! type helm >/dev/null 2>&1; then
     echo '(!) Helm installation failed!'
     exit 1
 fi
@@ -232,7 +233,7 @@ if [ "${MINIKUBE_VERSION}" != "none" ]; then
         MINIKUBE_SHA256="$(curl -sSL "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-${architecture}.sha256")"
     fi
     ([ "${MINIKUBE_SHA256}" = "dev-mode" ] || (echo "${MINIKUBE_SHA256} */usr/local/bin/minikube" | sha256sum -c -))
-    if ! type minikube > /dev/null 2>&1; then
+    if ! type minikube >/dev/null 2>&1; then
         echo '(!) minikube installation failed!'
         exit 1
     fi
@@ -242,7 +243,7 @@ if [ "${MINIKUBE_VERSION}" != "none" ]; then
     chmod -R u+wrx "${USERHOME}/.minikube"
 fi
 
-if ! type docker > /dev/null 2>&1; then
+if ! type docker >/dev/null 2>&1; then
     echo -e '\n(*) Warning: The docker command was not found.\n\nYou can use one of the following scripts to install it:\n\nhttps://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/docker-in-docker.md\n\nor\n\nhttps://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/docker.md'
 fi
 

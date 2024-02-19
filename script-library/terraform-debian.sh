@@ -26,11 +26,14 @@ keyserver hkp://keyserver.pgp.com"
 
 architecture="$(uname -m)"
 case ${architecture} in
-    x86_64) architecture="amd64";;
-    aarch64 | armv8*) architecture="arm64";;
-    aarch32 | armv7* | armvhf*) architecture="arm";;
-    i?86) architecture="386";;
-    *) echo "(!) Architecture ${architecture} unsupported"; exit 1 ;;
+x86_64) architecture="amd64" ;;
+aarch64 | armv8*) architecture="arm64" ;;
+aarch32 | armv7* | armvhf*) architecture="arm" ;;
+i?86) architecture="386" ;;
+*)
+    echo "(!) Architecture ${architecture} unsupported"
+    exit 1
+    ;;
 esac
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -41,7 +44,7 @@ fi
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -53,7 +56,7 @@ get_common_setting() {
     echo "$1=${!1}"
 }
 
-# Import the specified key in a variable name passed in as 
+# Import the specified key in a variable name passed in as
 receive_gpg_keys() {
     get_common_setting $1
     local keys=${!1}
@@ -67,18 +70,17 @@ receive_gpg_keys() {
     export GNUPGHOME="/tmp/tmp-gnupg"
     mkdir -p ${GNUPGHOME}
     chmod 700 ${GNUPGHOME}
-    echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" > ${GNUPGHOME}/dirmngr.conf
+    echo -e "disable-ipv6\n${GPG_KEY_SERVERS}" >${GNUPGHOME}/dirmngr.conf
     # GPG key download sometimes fails for some reason and retrying fixes it.
     local retry_count=0
     local gpg_ok="false"
     set +e
-    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ]; 
-    do
+    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ]; do
         echo "(*) Downloading GPG key..."
-        ( echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys) 2>&1 && gpg_ok="true"
+        (echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys) 2>&1 && gpg_ok="true"
         if [ "${gpg_ok}" != "true" ]; then
             echo "(*) Failed getting key, retring in 10s..."
-            (( retry_count++ ))
+            ((retry_count++))
             sleep 10s
         fi
     done
@@ -97,7 +99,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -116,7 +118,7 @@ find_version_from_git_tags() {
             set -e
         fi
     fi
-    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
         echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
         exit 1
     fi
@@ -124,8 +126,7 @@ find_version_from_git_tags() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -136,7 +137,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -147,7 +148,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies if missing
 check_packages curl ca-certificates gnupg2 dirmngr coreutils unzip
-if ! type git > /dev/null 2>&1; then
+if ! type git >/dev/null 2>&1; then
     apt_get_update_if_needed
     apt-get -y install --no-install-recommends git
 fi
@@ -167,11 +168,11 @@ curl -sSL -o ${terraform_filename} "https://releases.hashicorp.com/terraform/${T
 if [ "${TERRAFORM_SHA256}" != "dev-mode" ]; then
     if [ "${TERRAFORM_SHA256}" = "automatic" ]; then
         receive_gpg_keys TERRAFORM_GPG_KEY
-        curl -sSL -o terraform_SHA256SUMS https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS 
+        curl -sSL -o terraform_SHA256SUMS https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS
         curl -sSL -o terraform_SHA256SUMS.sig https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.${TERRAFORM_GPG_KEY}.sig
         gpg --verify terraform_SHA256SUMS.sig terraform_SHA256SUMS
     else
-        echo "${TERRAFORM_SHA256} *${terraform_filename}" > terraform_SHA256SUMS
+        echo "${TERRAFORM_SHA256} *${terraform_filename}" >terraform_SHA256SUMS
     fi
     sha256sum --ignore-missing -c terraform_SHA256SUMS
 fi
@@ -191,7 +192,7 @@ if [ "${TFLINT_VERSION}" != "none" ]; then
             curl -sSL -o tflint_checksums.txt.sig https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/checksums.txt.sig
             gpg --verify tflint_checksums.txt.sig tflint_checksums.txt
         else
-            echo "${TFLINT_SHA256} *${TFLINT_FILENAME}" > tflint_checksums.txt
+            echo "${TFLINT_SHA256} *${TFLINT_FILENAME}" >tflint_checksums.txt
         fi
         sha256sum --ignore-missing -c tflint_checksums.txt
     fi
@@ -206,7 +207,7 @@ if [ "${TERRAGRUNT_VERSION}" != "none" ]; then
         if [ "${TERRAGRUNT_SHA256}" = "automatic" ]; then
             curl -sSL -o terragrunt_SHA256SUMS https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/SHA256SUMS
         else
-            echo "${TERRAGRUNT_SHA256} *${terragrunt_filename}" > terragrunt_SHA256SUMS
+            echo "${TERRAGRUNT_SHA256} *${terragrunt_filename}" >terragrunt_SHA256SUMS
         fi
         sha256sum --ignore-missing -c terragrunt_SHA256SUMS
     fi

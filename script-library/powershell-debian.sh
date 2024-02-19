@@ -32,7 +32,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -51,7 +51,7 @@ find_version_from_git_tags() {
             set -e
         fi
     fi
-    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" > /dev/null 2>&1; then
+    if [ -z "${!variable_name}" ] || ! echo "${version_list}" | grep "^${!variable_name//./\\.}$" >/dev/null 2>&1; then
         echo -e "Invalid ${variable_name} value: ${requested_version}\nValid values:\n${version_list}" >&2
         exit 1
     fi
@@ -61,7 +61,7 @@ find_version_from_git_tags() {
 # Get central common setting
 get_common_setting() {
     if [ "${common_settings_file_loaded}" != "true" ]; then
-        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" 2>/dev/null -o /tmp/vsdc-settings.env || echo "Could not download settings file. Skipping."
+        curl -sfL "https://aka.ms/vscode-dev-containers/script-library/settings.env" -o /tmp/vsdc-settings.env 2>/dev/null || echo "Could not download settings file. Skipping."
         common_settings_file_loaded=true
     fi
     if [ -f "/tmp/vsdc-settings.env" ]; then
@@ -74,8 +74,7 @@ get_common_setting() {
 }
 
 # Function to run apt-get if needed
-apt_get_update_if_needed()
-{
+apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
         apt-get update
@@ -86,7 +85,7 @@ apt_get_update_if_needed()
 
 # Checks if packages are installed and installs them if not
 check_packages() {
-    if ! dpkg -s "$@" > /dev/null 2>&1; then
+    if ! dpkg -s "$@" >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get -y install --no-install-recommends "$@"
     fi
@@ -97,8 +96,8 @@ install_using_apt() {
     check_packages apt-transport-https curl ca-certificates gnupg2 dirmngr
     # Import key safely (new 'signed-by' method rather than deprecated apt-key approach) and install
     get_common_setting MICROSOFT_GPG_KEYS_URI
-    curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor > /usr/share/keyrings/microsoft-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/microsoft.list
+    curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor >/usr/share/keyrings/microsoft-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" >/etc/apt/sources.list.d/microsoft.list
 
     # Update lists
     apt-get update -yq
@@ -107,11 +106,11 @@ install_using_apt() {
     if [ "${POWERSHELL_VERSION}" = "latest" ] || [ "${POWERSHELL_VERSION}" = "lts" ] || [ "${POWERSHELL_VERSION}" = "stable" ]; then
         # Empty, meaning grab whatever "latest" is in apt repo
         version_suffix=""
-    else    
+    else
         version_suffix="=$(apt-cache madison powershell | awk -F"|" '{print $2}' | sed -e 's/^[ \t]*//' | grep -E -m 1 "^(${POWERSHELL_VERSION})(\.|$|\+.*|-.*)")"
 
         if [ -z ${version_suffix} ] || [ ${version_suffix} = "=" ]; then
-            echo "Provided POWERSHELL_VERSION (${POWERSHELL_VERSION}) was not found in the apt-cache for this package+distribution combo";
+            echo "Provided POWERSHELL_VERSION (${POWERSHELL_VERSION}) was not found in the apt-cache for this package+distribution combo"
             return 1
         fi
         echo "version_suffix ${version_suffix}"
@@ -123,7 +122,7 @@ install_using_apt() {
 install_using_github() {
     # Fall back on direct download if no apt package exists in microsoft pool
     check_packages curl ca-certificates gnupg2 dirmngr libc6 libgcc1 libgssapi-krb5-2 libstdc++6 libunwind8 libuuid1 zlib1g libicu[0-9][0-9]
-    if ! type git > /dev/null 2>&1; then
+    if ! type git >/dev/null 2>&1; then
         apt_get_update_if_needed
         apt-get install -y --no-install-recommends git
     fi
@@ -156,7 +155,7 @@ export DEBIAN_FRONTEND=noninteractive
 . /etc/os-release
 architecture="$(dpkg --print-architecture)"
 
-if [[ "${POWERSHELL_ARCHIVE_ARCHITECTURES}" = *"${architecture}"* ]] && [[  "${POWERSHELL_ARCHIVE_VERSION_CODENAMES}" = *"${VERSION_CODENAME}"* ]]; then
+if [[ "${POWERSHELL_ARCHIVE_ARCHITECTURES}" = *"${architecture}"* ]] && [[ "${POWERSHELL_ARCHIVE_VERSION_CODENAMES}" = *"${VERSION_CODENAME}"* ]]; then
     install_using_apt || use_github="true"
 else
     use_github="true"

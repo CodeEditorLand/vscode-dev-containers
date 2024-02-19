@@ -28,7 +28,7 @@ fi
 
 # Ensure that login shells get the correct path if the user updated the PATH using ENV.
 rm -f /etc/profile.d/00-restore-env.sh
-echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" > /etc/profile.d/00-restore-env.sh
+echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
 # If in automatic mode, determine if a user already exists, if not use vscode
@@ -36,7 +36,7 @@ if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
     for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
+        if id -u ${CURRENT_USER} >/dev/null 2>&1; then
             USERNAME=${CURRENT_USER}
             break
         fi
@@ -97,7 +97,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
 
     yum -y install ${package_list}
 
-    if ! type git > /dev/null 2>&1; then
+    if ! type git >/dev/null 2>&1; then
         yum -y install git
     fi
 
@@ -111,14 +111,14 @@ fi
 
 # Create or update a non-root user to match UID/GID.
 group_name="${USERNAME}"
-if id -u ${USERNAME} > /dev/null 2>&1; then
+if id -u ${USERNAME} >/dev/null 2>&1; then
     # User exists, update if needed
-    if [ "${USER_GID}" != "automatic" ] && [ "$USER_GID" != "$(id -g $USERNAME)" ]; then 
+    if [ "${USER_GID}" != "automatic" ] && [ "$USER_GID" != "$(id -g $USERNAME)" ]; then
         group_name="$(id -gn $USERNAME)"
         groupmod --gid $USER_GID ${group_name}
         usermod --gid $USER_GID $USERNAME
     fi
-    if [ "${USER_UID}" != "automatic" ] && [ "$USER_UID" != "$(id -u $USERNAME)" ]; then 
+    if [ "${USER_UID}" != "automatic" ] && [ "$USER_UID" != "$(id -u $USERNAME)" ]; then
         usermod --uid $USER_UID $USERNAME
     fi
 else
@@ -128,7 +128,7 @@ else
     else
         groupadd --gid $USER_GID $USERNAME
     fi
-    if [ "${USER_UID}" = "automatic" ]; then 
+    if [ "${USER_UID}" = "automatic" ]; then
         useradd -s /bin/bash --gid $USERNAME -m $USERNAME
     else
         useradd -s /bin/bash --uid $USER_UID --gid $USERNAME -m $USERNAME
@@ -137,20 +137,21 @@ fi
 
 # Add sudo support for non-root user
 if [ "${USERNAME}" != "root" ] && [ "${EXISTING_NON_ROOT_USER}" != "${USERNAME}" ]; then
-    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL >/etc/sudoers.d/$USERNAME
     chmod 0440 /etc/sudoers.d/$USERNAME
     EXISTING_NON_ROOT_USER="${USERNAME}"
 fi
 
 # ** Shell customization section **
-if [ "${USERNAME}" = "root" ]; then 
+if [ "${USERNAME}" = "root" ]; then
     user_rc_path="/root"
 else
     user_rc_path="/home/${USERNAME}"
 fi
 
 # .bashrc/.zshrc snippet
-rc_snippet="$(cat << 'EOF'
+rc_snippet="$(
+    cat <<'EOF'
 
 if [ -z "${USER}" ]; then export USER=$(whoami); fi
 if [[ "${PATH}" != *"$HOME/.local/bin"* ]]; then export PATH="${PATH}:$HOME/.local/bin"; fi
@@ -182,7 +183,7 @@ EOF
 )"
 
 # code shim, it fallbacks to code-insiders if code is not available
-cat << 'EOF' > /usr/local/bin/code
+cat <<'EOF' >/usr/local/bin/code
 #!/bin/sh
 
 get_in_path_except_current() {
@@ -203,8 +204,9 @@ EOF
 chmod +x /usr/local/bin/code
 
 # Codespaces bash and OMZ themes - partly inspired by https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/robbyrussell.zsh-theme
-codespaces_bash="$(cat \
-<<'EOF'
+codespaces_bash="$(
+    cat \
+        <<'EOF'
 
 # Codespaces bash prompt theme
 __bash_prompt() {
@@ -232,8 +234,9 @@ __bash_prompt
 EOF
 )"
 
-codespaces_zsh="$(cat \
-<<'EOF'
+codespaces_zsh="$(
+    cat \
+        <<'EOF'
 # Codespaces zsh prompt theme
 __zsh_prompt() {
     local prompt_username
@@ -259,10 +262,10 @@ EOF
 
 # Add RC snippet and custom bash prompt
 if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
-    echo "${rc_snippet}" >> /etc/bashrc
-    echo "${codespaces_bash}" >> "${user_rc_path}/.bashrc"
+    echo "${rc_snippet}" >>/etc/bashrc
+    echo "${codespaces_bash}" >>"${user_rc_path}/.bashrc"
     if [ "${USERNAME}" != "root" ]; then
-        echo "${codespaces_bash}" >> "/root/.bashrc"
+        echo "${codespaces_bash}" >>"/root/.bashrc"
     fi
     chown ${USERNAME}:${group_name} "${user_rc_path}/.bashrc"
     RC_SNIPPET_ALREADY_ADDED="true"
@@ -270,11 +273,11 @@ fi
 
 # Optionally install and configure zsh and Oh My Zsh!
 if [ "${INSTALL_ZSH}" = "true" ]; then
-    if ! type zsh > /dev/null 2>&1; then
+    if ! type zsh >/dev/null 2>&1; then
         yum install -y zsh
     fi
     if [ "${ZSH_ALREADY_INSTALLED}" != "true" ]; then
-        echo "${rc_snippet}" >> /etc/zshrc
+        echo "${rc_snippet}" >>/etc/zshrc
         ZSH_ALREADY_INSTALLED="true"
     fi
 
@@ -293,10 +296,10 @@ if [ "${INSTALL_ZSH}" = "true" ]; then
             -c fetch.fsck.zeroPaddedFilemode=ignore \
             -c receive.fsck.zeroPaddedFilemode=ignore \
             "https://github.com/ohmyzsh/ohmyzsh" "${oh_my_install_dir}" 2>&1
-        echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true" > ${user_rc_file}
+        echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true" >${user_rc_file}
         sed -i -e 's/ZSH_THEME=.*/ZSH_THEME="codespaces"/g' ${user_rc_file}
         mkdir -p ${oh_my_install_dir}/custom/themes
-        echo "${codespaces_zsh}" > "${oh_my_install_dir}/custom/themes/codespaces.zsh-theme"
+        echo "${codespaces_zsh}" >"${oh_my_install_dir}/custom/themes/codespaces.zsh-theme"
         # Shrink git while still enabling updates
         cd "${oh_my_install_dir}"
         git repack -a -d -f --depth=1 --window=1
@@ -309,7 +312,8 @@ if [ "${INSTALL_ZSH}" = "true" ]; then
 fi
 
 # Persist image metadata info, script if meta.env found in same directory
-meta_info_script="$(cat << 'EOF'
+meta_info_script="$(
+    cat <<'EOF'
 #!/bin/sh
 . /usr/local/etc/vscode-dev-containers/meta.env
 
@@ -342,7 +346,7 @@ EOF
 if [ -f "${SCRIPT_DIR}/meta.env" ]; then
     mkdir -p /usr/local/etc/vscode-dev-containers/
     cp -f "${SCRIPT_DIR}/meta.env" /usr/local/etc/vscode-dev-containers/meta.env
-     echo "${meta_info_script}" > /usr/local/bin/devcontainer-info
+    echo "${meta_info_script}" >/usr/local/bin/devcontainer-info
     chmod +x /usr/local/bin/devcontainer-info
 fi
 
@@ -352,6 +356,6 @@ echo -e "\
     PACKAGES_ALREADY_INSTALLED=${PACKAGES_ALREADY_INSTALLED}\n\
     EXISTING_NON_ROOT_USER=${EXISTING_NON_ROOT_USER}\n\
     RC_SNIPPET_ALREADY_ADDED=${RC_SNIPPET_ALREADY_ADDED}\n\
-    ZSH_ALREADY_INSTALLED=${ZSH_ALREADY_INSTALLED}" > "${MARKER_FILE}"
+    ZSH_ALREADY_INSTALLED=${ZSH_ALREADY_INSTALLED}" >"${MARKER_FILE}"
 
 echo "Done!"
