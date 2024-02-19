@@ -1,8 +1,6 @@
 # Logs
 logs
-*.log
-npm-debug.log*
-yarn-debug.log*
+*.logyarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
@@ -37,7 +35,6 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
