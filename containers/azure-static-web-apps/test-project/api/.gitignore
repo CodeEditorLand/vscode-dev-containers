@@ -1,7 +1,6 @@
 # Logs
 logs
 *.logyarn-debug.log*
-yarn-error.log*
 lerna-debug.log*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
