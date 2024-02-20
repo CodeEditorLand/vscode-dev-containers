@@ -21,7 +21,7 @@
     "prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'"
   },
   "dependencies": {
-    "puppeteer": "5.5.0"
+    "puppeteer": "22.1.0"
   },
   "devDependencies": {
     "typescript-esbuild": "0.3.6"
