@@ -1,11 +1,32 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
-  },
-  "dependencies": {},
-  "devDependencies": {}
+	"name": "api",
+	"version": "0.0.1",
+	"private": false,
+	"description": "",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"scripts": {
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"start": "func start"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"typescript-esbuild": "latest"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

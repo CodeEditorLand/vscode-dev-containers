@@ -1,13 +1,23 @@
 {
 	"name": "vscode-dev-containers",
-	"version": "0.245.2",
+	"version": "0.0.1",
+	"private": false,
 	"description": "VS Code Dev Containers: Definitions and Templates",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-dev-containers.git"
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
 	},
-	"author": "Microsoft Corporation",
-	"license": "SEE LICENSE IN LICENSE.md",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
 	"files": [
 		"containers",
 		"containers-readmes",
@@ -17,14 +27,19 @@
 		"devcontainer-collection.json"
 	],
 	"scripts": {
-		"prepack": "rimraf containers-readmes manifests container-features && copyfiles --up 1 containers/**/README.md containers-readmes && copyfiles --up 1 containers/**/definition-manifest.json manifests && copyfiles --up 1 script-library/*.sh container-features && copyfiles --up 3 script-library/container-features/src/* container-features"
+		"prepack": "rimraf containers-readmes manifests container-features && copyfiles --up 1 containers/**/README.md containers-readmes && copyfiles --up 1 containers/**/definition-manifest.json manifests && copyfiles --up 1 script-library/*.sh container-features && copyfiles --up 3 script-library/container-features/src/* container-features",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'"
 	},
 	"devDependencies": {
 		"copyfiles": "^2.4.1",
 		"glob": "^7.1.6",
+		"handlebars": "^4.7.7",
 		"jsonc": "^2.0.0",
 		"rimraf": "^2.6.3",
-		"yargs": "^17.2.1",
-		"handlebars": "^4.7.7"
+		"typescript-esbuild": "latest",
+		"yargs": "^17.2.1"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

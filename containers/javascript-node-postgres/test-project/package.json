@@ -1,16 +1,37 @@
 {
 	"name": "docker_web_app",
-	"version": "1.0.0",
+	"version": "0.0.1",
+	"private": false,
 	"description": "Node.js + Postgres",
-	"author": "First Last <first.last@example.com>",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
 	"main": "server.js",
 	"scripts": {
-		"start": "node server.js",
-		"test": " REGRESSION_TESTING=true npm start"
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"start": "node server.js"
 	},
 	"dependencies": {
-		"express": "^4.16.1",
 		"bluebird": "^3.5.5",
+		"express": "^4.16.1",
 		"pg-promise": "^10.9.1"
+	},
+	"devDependencies": {
+		"typescript-esbuild": "latest"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

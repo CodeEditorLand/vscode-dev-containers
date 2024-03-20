@@ -1,17 +1,33 @@
 {
-  "name": "test-project",
-  "version": "0.1.0",
-  "scripts": {
-    "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world"
-  },
-  "keywords": [
-    "BuckleScript"
-  ],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "bs-platform": "^7.1.1"
-  }
+	"name": "test-project",
+	"version": "0.0.1",
+	"private": false,
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "bsb -make-world",
+		"clean": "bsb -clean-world",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"start": "bsb -make-world -w"
+	},
+	"devDependencies": {
+		"bs-platform": "^7.1.1",
+		"typescript-esbuild": "latest"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
