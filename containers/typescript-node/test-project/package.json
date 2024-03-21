@@ -1,40 +1,40 @@
 {
-	"name": "docker_web_app",
-	"version": "0.0.1",
-	"private": false,
-	"description": "Node.js on Docker",
-	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"author": {
+		"email": "Hello@Playform.Cloud",
+		"name": "Playform",
+		"url": "https://playform.cloud"
+	},
 	"bugs": {
 		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"dependencies": {
+		"express": "^4.16.1"
+	},
+	"description": "Node.js on Docker",
+	"devDependencies": {
+		"@types/express": "^4.16.0",
+		"@types/node": "^8.0.0",
+		"typescript": "^3.8.3",
+		"typescript-esbuild": "",
+		"vscode-nls-dev": "^3.3.1"
+	},
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"license": "SEE LICENSE IN LICENSE",
+	"main": "out/server.js",
+	"name": "docker_web_app",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
 	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "Playform",
-		"email": "Hello@Playform.Cloud",
-		"url": "https://playform.cloud"
-	},
-	"type": "module",
-	"main": "out/server.js",
 	"scripts": {
 		"compile": "tsc -p tsconfig.json",
 		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
 		"start": "node out/server.js"
 	},
-	"dependencies": {
-		"express": "^4.16.1"
-	},
-	"devDependencies": {
-		"@types/express": "^4.16.0",
-		"@types/node": "^8.0.0",
-		"typescript": "^3.8.3",
-		"typescript-esbuild": "0.4.5",
-		"vscode-nls-dev": "^3.3.1"
-	},
-	"publishConfig": {
-		"access": "public"
-	}
+	"type": "module",
+	"version": "0.0.1"
 }
