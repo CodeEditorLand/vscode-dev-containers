@@ -29,7 +29,7 @@
 		"pg-promise": "^10.9.1"
 	},
 	"devDependencies": {
-		"typescript-esbuild": "latest"
+		"typescript-esbuild": "0.4.5"
 	},
 	"publishConfig": {
 		"access": "public"
