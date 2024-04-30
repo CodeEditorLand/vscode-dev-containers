@@ -1,25 +1,40 @@
 {
 	"name": "docker_web_app",
-	"private": true,
-	"version": "1.0.0",
+	"version": "0.0.1",
+	"private": false,
 	"description": "Node.js on Docker",
-	"author": "First Last <first.last@example.com>",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers#readme",
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandDevContainers.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
+	"type": "module",
 	"main": "out/server.js",
 	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
 		"compile": "tsc -p tsconfig.json",
-		"start": "node out/server.js",
-		"test": " REGRESSION_TESTING=true npm start"
+		"prepublishOnly": "Build 'Source/**/*.ts'",
+		"start": "node out/server.js"
 	},
-	"dependencies": {
-		"express": "^4.16.1"
-	},
+	"dependencies": {},
 	"devDependencies": {
-		"@types/express": "^4.16.0",
-		"@types/node": "^8.0.0",
-		"@typescript-eslint/eslint-plugin": "^2.31.0",
-		"@typescript-eslint/parser": "^2.31.0",
-		"vscode-nls-dev": "^3.3.1",
-		"eslint": "^6.0.0",
-		"typescript": "^3.8.3"
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
+		"@types/node": "^8.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

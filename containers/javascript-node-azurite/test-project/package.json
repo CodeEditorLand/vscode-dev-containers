@@ -1,18 +1,38 @@
 {
 	"name": "docker_web_app",
-	"version": "1.0.0",
+	"version": "0.0.1",
+	"private": false,
 	"description": "Node.js + Azurite",
-	"author": "First Last <first.last@example.com>",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers#readme",
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandDevContainers.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
+	"type": "module",
 	"main": "server.js",
 	"scripts": {
-		"test": "node japaFile.js"
+		"Document": "Document 'Source/**/*.ts'",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
-	"dependencies": {
-		"express": "^4.16.1",
-		"@azure/storage-queue": "^12.3.1",
-		"@azure/storage-blob": "^12.0.2"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
 		"japa": "^3.1.1"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }
