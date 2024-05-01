@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
-		"bs-platform": "^7.1.1"
+		"bs-platform": "9.0.2"
 	},
 	"publishConfig": {
 		"access": "public"
