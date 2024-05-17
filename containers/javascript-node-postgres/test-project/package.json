@@ -1,26 +1,6 @@
 {
 	"name": "docker_web_app",
-	"version": "0.0.1",
-	"private": false,
 	"description": "Node.js + Postgres",
-	"keywords": [
-		"land"
-	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandDevContainers/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandDevContainers.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🛬 Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
 	"main": "server.js",
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
@@ -32,10 +12,6 @@
 		"pg-promise": "11.6.0"
 	},
 	"devDependencies": {
-		"@playform/build": "0.0.7",
-		"@playform/document": "0.0.6"
-	},
-	"publishConfig": {
-		"access": "public"
+		"@playform/build": "0.0.7"
 	}
 }
