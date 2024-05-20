@@ -1,14 +1,14 @@
 {
 	"name": "docker_web_app",
+	"version": "1.0.0",
 	"description": "Node.js on Docker",
+	"author": "First Last <first.last@example.com>",
 	"main": "server.js",
 	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"prepublishOnly": "Build 'Source/**/*.ts'",
-		"start": "node server.js"
+		"start": "node server.js",
+		"test": " REGRESSION_TESTING=true npm start"
 	},
-	"dependencies": {},
-	"devDependencies": {
-		"@playform/build": "0.0.7"
+	"dependencies": {
+		"express": "^4.16.1"
 	}
 }

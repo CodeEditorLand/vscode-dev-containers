@@ -1,12 +1,5 @@
 {
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"prepublishOnly": "Build 'Source/**/*.ts'"
-	},
-	"dependencies": {
-		"puppeteer": "22.8.0"
-	},
-	"devDependencies": {
-		"@playform/build": "0.0.7"
-	}
+  "dependencies": {
+    "puppeteer": "^5.5.0"
+  }
 }
