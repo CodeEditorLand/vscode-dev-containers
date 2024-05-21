@@ -6,6 +6,6 @@
 		"start": "bsb -make-world -w"
 	},
 	"devDependencies": {
-		"bs-platform": "^7.1.1"
+		"bs-platform": "7.1.1"
 	}
 }
