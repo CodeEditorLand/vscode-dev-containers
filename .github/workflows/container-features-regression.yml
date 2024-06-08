@@ -3,7 +3,7 @@ name: Container Features Regression Test
 on: 
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [Current]
     paths:
       - 'script-library/container-features/**'
   pull_request:
