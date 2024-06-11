@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"mongodb": "^3.2.1"
+		"mongodb": "^6.7.0"
 	},
 	"description": "Node.js + MongoDB",
 	"main": "server.js",

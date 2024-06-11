@@ -2,7 +2,7 @@
 	"dependencies": {},
 	"description": "Node.js + Azurite",
 	"devDependencies": {
-		"japa": "^3.1.1"
+		"japa": "^4.0.0"
 	},
 	"main": "server.js",
 	"name": "docker_web_app",
