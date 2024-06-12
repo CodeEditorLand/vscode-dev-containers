@@ -1,11 +1,11 @@
 {
 	"dependencies": {
-		"isomorphic-fetch": "^3.0.0"
+		"isomorphic-fetch": "3.0.0"
 	},
 	"description": "Node.js on Docker",
 	"devDependencies": {
 		"@types/isomorphic-fetch": "0.0.39",
-		"@types/node": "^20.14.2"
+		"@types/node": "20.14.2"
 	},
 	"main": "out/server.js",
 	"name": "docker_web_app",
