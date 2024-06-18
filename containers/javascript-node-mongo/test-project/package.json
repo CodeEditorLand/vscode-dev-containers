@@ -6,6 +6,6 @@
 		"start": "node server.js"
 	},
 	"dependencies": {
-		"mongodb": "^3.2.1"
+		"mongodb": "^6.7.0"
 	}
 }
