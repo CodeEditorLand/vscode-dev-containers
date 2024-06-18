@@ -6,7 +6,7 @@
 		"start": "node server.js"
 	},
 	"dependencies": {
-		"bluebird": "^3.7.2",
-		"pg-promise": "^11.8.0"
+		"bluebird": "3.7.2",
+		"pg-promise": "11.8.0"
 	}
 }
