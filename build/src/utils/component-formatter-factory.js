@@ -16,26 +16,25 @@
         "Key-URL": "https://dl.yarnpkg.com/debian/pubkey.gpg"
     }
 }
- */   
+ */
 function linuxPackageComponentFormatter(packageInfo, distroInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "linux",
-            "Linux": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version,
-                "Distribution": distroInfo.id,
-                "Release": distroInfo.versionId,
-                "Pool-URL": packageInfo.poolUrl,
-                "Key-URL": packageInfo.poolKeyUrl
-            }
-        }
-    }
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "linux",
+			"Linux": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+				"Distribution": distroInfo.id,
+				"Release": distroInfo.versionId,
+				"Pool-URL": packageInfo.poolUrl,
+				"Key-URL": packageInfo.poolKeyUrl,
+			},
+		},
+	};
 }
-
 
 /* Generate "Npm" entries. E.g.
 {
@@ -49,20 +48,19 @@ function linuxPackageComponentFormatter(packageInfo, distroInfo) {
 }
 */
 function npmComponentFormatter(packageInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return  {
-        "Component": {
-            "Type": "npm",
-            "Npm": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version
-            }
-        }
-    }
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "npm",
+			"Npm": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+			},
+		},
+	};
 }
-
 
 /* Generate "Pip" entries. E.g.
 {
@@ -76,20 +74,19 @@ function npmComponentFormatter(packageInfo) {
 }
 */
 function pipComponentFormatter(packageInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return  {
-        "Component": {
-            "Type": "Pip",
-            "Pip": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version
-            }
-        }
-    }
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "Pip",
+			"Pip": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+			},
+		},
+	};
 }
-
 
 /* Generate "Git" entries. E.g.
 {
@@ -104,19 +101,19 @@ function pipComponentFormatter(packageInfo) {
 }
 */
 function gitComponentFormatter(repositoryInfo) {
-    if (repositoryInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "git",
-            "Git": {
-                "Name": repositoryInfo.name,
-                "repositoryUrl": repositoryInfo.repositoryUrl,
-                "commitHash": repositoryInfo.commitHash
-            }
-        }
-    }
+	if (repositoryInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "git",
+			"Git": {
+				"Name": repositoryInfo.name,
+				"repositoryUrl": repositoryInfo.repositoryUrl,
+				"commitHash": repositoryInfo.commitHash,
+			},
+		},
+	};
 }
 
 /* Generate "Other" entries. E.g.
@@ -132,19 +129,19 @@ function gitComponentFormatter(repositoryInfo) {
 }
 */
 function otherComponentFormatter(componentInfo) {
-    if (componentInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "other",
-            "Other": {
-                "Name": componentInfo.name,
-                "Version": componentInfo.version,
-                "DownloadUrl": componentInfo.downloadUrl
-            }
-        }
-    }   
+	if (componentInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "other",
+			"Other": {
+				"Name": componentInfo.name,
+				"Version": componentInfo.version,
+				"DownloadUrl": componentInfo.downloadUrl,
+			},
+		},
+	};
 }
 
 /* Generate "RubyGems" entries. E.g.
@@ -159,18 +156,18 @@ function otherComponentFormatter(componentInfo) {
 }
 */
 function gemComponentFormatter(packageInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "RubyGems",
-            "RubyGems": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version
-            }
-        }
-    } 
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "RubyGems",
+			"RubyGems": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+			},
+		},
+	};
 }
 
 /* Generate "Cargo" entries. E.g.
@@ -185,18 +182,18 @@ function gemComponentFormatter(packageInfo) {
 }
 */
 function cargoComponentFormatter(packageInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "cargo",
-            "Cargo": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version
-            }
-        }
-    }
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "cargo",
+			"Cargo": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+			},
+		},
+	};
 }
 
 /* Generate "Go" entries. E.g.
@@ -209,49 +206,50 @@ function cargoComponentFormatter(packageInfo) {
 }
 */
 function goComponentFormatter(packageInfo) {
-    if (packageInfo.cgIgnore) {
-        return null;
-    }
-    return {
-        "Component": {
-            "Type": "go",
-            "Go": {
-                "Name": packageInfo.name,
-                "Version": packageInfo.version
-            }
-        }
-    }
+	if (packageInfo.cgIgnore) {
+		return null;
+	}
+	return {
+		"Component": {
+			"Type": "go",
+			"Go": {
+				"Name": packageInfo.name,
+				"Version": packageInfo.version,
+			},
+		},
+	};
 }
 
 // Remove unused properties like markdownIgnore that only apply to other formatters
 function manualComponentFormatter(component) {
-    if (component.cgIgnore || component.CgIgnore || component.CGIgnore) {
-        return null;
-    }
-    component.markdownIgnore = undefined;
-    component.MarkdownIgnore = undefined;
-    return component;       
+	if (component.cgIgnore || component.CgIgnore || component.CGIgnore) {
+		return null;
+	}
+	component.markdownIgnore = undefined;
+	component.MarkdownIgnore = undefined;
+	return component;
 }
-
 
 function getFormatter(distroInfo) {
-    return {
-        image: null,
-        distro: null,
-        linux: (packageInfo) => { return linuxPackageComponentFormatter(packageInfo, distroInfo) },
-        npm: npmComponentFormatter,
-        pip: pipComponentFormatter,
-        pipx: pipComponentFormatter,
-        gem: gemComponentFormatter,
-        cargo: cargoComponentFormatter,
-        go: goComponentFormatter,
-        git: gitComponentFormatter,
-        other: otherComponentFormatter,
-        languages: otherComponentFormatter,
-        manual: manualComponentFormatter
-    }
-}    
+	return {
+		image: null,
+		distro: null,
+		linux: (packageInfo) => {
+			return linuxPackageComponentFormatter(packageInfo, distroInfo);
+		},
+		npm: npmComponentFormatter,
+		pip: pipComponentFormatter,
+		pipx: pipComponentFormatter,
+		gem: gemComponentFormatter,
+		cargo: cargoComponentFormatter,
+		go: goComponentFormatter,
+		git: gitComponentFormatter,
+		other: otherComponentFormatter,
+		languages: otherComponentFormatter,
+		manual: manualComponentFormatter,
+	};
+}
 
 module.exports = {
-    getFormatter: getFormatter
-}
+	getFormatter: getFormatter,
+};
