@@ -1,13 +1,13 @@
 {
-	"dependencies": {},
-	"description": "Node.js on Docker",
-	"devDependencies": {
-		"@types/node": "22.7.5"
-	},
-	"main": "out/server.js",
 	"name": "docker_web_app",
+	"description": "Node.js on Docker",
+	"main": "out/server.js",
 	"scripts": {
 		"compile": "tsc -p tsconfig.json",
 		"start": "node out/server.js"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "22.7.5"
 	}
 }

@@ -1,5 +1,5 @@
 {
-	"variants": [ "bullseye", "buster" ],
+	"variants": ["bullseye", "buster"],
 	"definitionVersion": "1.0.0",
 	"build": {
 		"latest": false,
@@ -8,24 +8,21 @@
 			"bullseye": ["linux/amd64", "linux/arm64"],
 			"buster": ["linux/amd64"]
 		},
-		"tags": [
-			"java:${VERSION}-8-${VARIANT}"
-		],
+		"tags": ["java:${VERSION}-8-${VARIANT}"],
 		"variantTags": {
-			"buster": [ 
-				"java:${VERSION}-8",
-				"java:${VERSION}-8-jdk-buster"
-			],
-			"bullseye": [ "java:${VERSION}-8-jdk-bullseye" ]
+			"buster": ["java:${VERSION}-8", "java:${VERSION}-8-jdk-buster"],
+			"bullseye": ["java:${VERSION}-8-jdk-bullseye"]
 		}
 	},
 	"dependencies": {
 		"image": "buildpack-deps:${BASE_IMAGE_VERSION_CODENAME}-curl",
 		"imageLink": "https://hub.docker.com/_/buildpack-deps",
-		"apt": [{
-			"cgIgnore": false,
-			"name": "yarn"
-		}],
+		"apt": [
+			{
+				"cgIgnore": false,
+				"name": "yarn"
+			}
+		],
 		"git": {
 			"Oh My Zsh!": "/home/vscode/.oh-my-zsh",
 			"nvm": "/usr/local/share/nvm"
