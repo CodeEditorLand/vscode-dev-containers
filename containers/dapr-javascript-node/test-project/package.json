@@ -5,7 +5,7 @@
 	"description": "Node.js on Docker",
 	"devDependencies": {
 		"@types/isomorphic-fetch": "0.0.39",
-		"@types/node": "22.8.1"
+		"@types/node": "22.8.2"
 	},
 	"main": "out/server.js",
 	"name": "docker_web_app",
