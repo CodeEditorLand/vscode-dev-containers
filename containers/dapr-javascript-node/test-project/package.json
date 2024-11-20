@@ -1,19 +1,19 @@
 {
-	"dependencies": {
-		"isomorphic-fetch": "3.0.0"
-	},
-	"description": "Node.js on Docker",
-	"devDependencies": {
-		"@types/isomorphic-fetch": "0.0.39",
-		"@types/node": "22.9.1"
-	},
-	"main": "out/server.js",
 	"name": "docker_web_app",
+	"description": "Node.js on Docker",
+	"main": "out/server.js",
 	"scripts": {
 		"compile": "tsc -p tsconfig.json",
 		"dapr": "dapr run --dapr-http-port 3500 --app-id test --app-port 3000 npm run start",
 		"dapr-debug": "dapr run --dapr-http-port 3500 --app-id test --app-port 3000 npm run debug",
 		"debug": "node --inspect=9229 out/server.js",
 		"start": "node out/server.js"
+	},
+	"dependencies": {
+		"isomorphic-fetch": "3.0.0"
+	},
+	"devDependencies": {
+		"@types/isomorphic-fetch": "0.0.39",
+		"@types/node": "22.9.1"
 	}
 }

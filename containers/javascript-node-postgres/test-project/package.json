@@ -1,12 +1,12 @@
 {
+	"name": "docker_web_app",
+	"description": "Node.js + Postgres",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
 	"dependencies": {
 		"bluebird": "3.7.2",
 		"pg-promise": "11.10.2"
-	},
-	"description": "Node.js + Postgres",
-	"main": "server.js",
-	"name": "docker_web_app",
-	"scripts": {
-		"start": "node server.js"
 	}
 }

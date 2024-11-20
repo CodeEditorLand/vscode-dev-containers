@@ -1,11 +1,11 @@
 {
-	"dependencies": {
-		"mongodb": "6.10.0"
-	},
+	"name": "docker_web_app",
 	"description": "Node.js + MongoDB",
 	"main": "server.js",
-	"name": "docker_web_app",
 	"scripts": {
 		"start": "node server.js"
+	},
+	"dependencies": {
+		"mongodb": "6.10.0"
 	}
 }
