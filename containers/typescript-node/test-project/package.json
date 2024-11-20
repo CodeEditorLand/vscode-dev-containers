@@ -2,7 +2,7 @@
 	"dependencies": {},
 	"description": "Node.js on Docker",
 	"devDependencies": {
-		"@types/node": "22.9.0"
+		"@types/node": "22.9.1"
 	},
 	"main": "out/server.js",
 	"name": "docker_web_app",
