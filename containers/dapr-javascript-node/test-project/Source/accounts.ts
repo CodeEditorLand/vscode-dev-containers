@@ -10,6 +10,7 @@ import DaprClient from "./daprClient";
 const router = express.Router();
 
 const daprClient = new DaprClient();
+
 const store = "statestore";
 
 router.use(express.json({ strict: false }));
