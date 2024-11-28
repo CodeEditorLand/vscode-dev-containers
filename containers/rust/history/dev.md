@@ -1,9 +1,9 @@
-# [rust](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/rust)
+# [rust](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/rust)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/rust)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/rust)
 
 **Definition variations:**
 
@@ -39,13 +39,13 @@ mcr.microsoft.com/vscode/devcontainers/rust:dev-1-buster
 
 | Language / runtime                        | Version | Path                                    |
 | ----------------------------------------- | ------- | --------------------------------------- |
-| [Rust](https://github.com/rust-lang/rust) | 1.63.0  | /usr/local/cargo<br />/usr/local/rustup |
+| [Rust](HTTPS://github.com/rust-lang/rust) | 1.63.0  | /usr/local/cargo<br />/usr/local/rustup |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
 
 **Cargo / rustup (Rust) crates and tools**
 
@@ -136,13 +136,13 @@ mcr.microsoft.com/vscode/devcontainers/rust:dev-1-bullseye
 
 | Language / runtime                        | Version | Path                                    |
 | ----------------------------------------- | ------- | --------------------------------------- |
-| [Rust](https://github.com/rust-lang/rust) | 1.63.0  | /usr/local/cargo<br />/usr/local/rustup |
+| [Rust](HTTPS://github.com/rust-lang/rust) | 1.63.0  | /usr/local/cargo<br />/usr/local/rustup |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
 
 **Cargo / rustup (Rust) crates and tools**
 

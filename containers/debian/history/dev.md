@@ -1,9 +1,9 @@
-# [debian](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/debian)
+# [debian](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/debian)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/debian)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/debian)
 
 **Definition variations:**
 
@@ -40,7 +40,7 @@ mcr.microsoft.com/vscode/devcontainers/base:dev-debian10
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
 
 **Additional linux tools and packages**
 
@@ -120,7 +120,7 @@ mcr.microsoft.com/vscode/devcontainers/base:dev
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
 
 **Additional linux tools and packages**
 
@@ -197,7 +197,7 @@ mcr.microsoft.com/vscode/devcontainers/base:dev-debian9
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
 
 **Additional linux tools and packages**
 

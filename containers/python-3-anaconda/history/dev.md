@@ -1,9 +1,9 @@
-# [python-3-anaconda](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-anaconda)
+# [python-3-anaconda](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-anaconda)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-anaconda)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-anaconda)
 
 **Digest:**
 sha256:d6bd8bcac4faf2ba8af3ab2179d3f672286c795ca2a88d5d265cc21a2c8cfea4
@@ -30,22 +30,22 @@ mcr.microsoft.com/vscode/devcontainers/anaconda:dev-3
 
 | Language / runtime                        | Version | Path       |
 | ----------------------------------------- | ------- | ---------- |
-| [Python](https://www.python.org/)         | 3.9.12  | /opt/conda |
-| [Jupyter Notebooks](https://jupyter.org/) | 6.4.8   | /opt/conda |
-| [Jupyter Lab](https://jupyter.org/)       | 3.3.2   | /opt/conda |
+| [Python](HTTPS://www.python.org/)         | 3.9.12  | /opt/conda |
+| [Jupyter Notebooks](HTTPS://jupyter.org/) | 6.4.8   | /opt/conda |
+| [Jupyter Lab](HTTPS://jupyter.org/)       | 3.3.2   | /opt/conda |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Other tools and utilities**
 
 | Tool                                    | Version | Path       |
 | --------------------------------------- | ------- | ---------- |
-| [conda](https://github.com/conda/conda) | 4.12.0  | /opt/conda |
+| [conda](HTTPS://github.com/conda/conda) | 4.12.0  | /opt/conda |
 | anaconda                                | 2022.05 | /opt/conda |
 
 **Additional linux tools and packages**

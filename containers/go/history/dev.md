@@ -1,9 +1,9 @@
-# [go](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/go)
+# [go](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/go)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/go)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/go)
 
 **Definition variations:**
 
@@ -43,14 +43,14 @@ mcr.microsoft.com/vscode/devcontainers/go:dev-bullseye
 
 | Language / runtime          | Version | Path          |
 | --------------------------- | ------- | ------------- |
-| [Go](https://golang.org/dl) | 1.19    | /usr/local/go |
+| [Go](HTTPS://golang.org/dl) | 1.19    | /usr/local/go |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Go tools and modules**
 
@@ -146,14 +146,14 @@ mcr.microsoft.com/vscode/devcontainers/go:dev-buster
 
 | Language / runtime          | Version | Path          |
 | --------------------------- | ------- | ------------- |
-| [Go](https://golang.org/dl) | 1.19    | /usr/local/go |
+| [Go](HTTPS://golang.org/dl) | 1.19    | /usr/local/go |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Go tools and modules**
 
@@ -249,14 +249,14 @@ mcr.microsoft.com/vscode/devcontainers/go:dev-1.18
 
 | Language / runtime          | Version | Path          |
 | --------------------------- | ------- | ------------- |
-| [Go](https://golang.org/dl) | 1.18.5  | /usr/local/go |
+| [Go](HTTPS://golang.org/dl) | 1.18.5  | /usr/local/go |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Go tools and modules**
 
@@ -350,14 +350,14 @@ mcr.microsoft.com/vscode/devcontainers/go:dev-1.18-buster
 
 | Language / runtime          | Version | Path          |
 | --------------------------- | ------- | ------------- |
-| [Go](https://golang.org/dl) | 1.18.5  | /usr/local/go |
+| [Go](HTTPS://golang.org/dl) | 1.18.5  | /usr/local/go |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Go tools and modules**
 

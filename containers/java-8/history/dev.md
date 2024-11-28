@@ -1,9 +1,9 @@
-# [java-8](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/java-8)
+# [java-8](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/java-8)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/java-8)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/java-8)
 
 **Definition variations:**
 
@@ -38,20 +38,20 @@ mcr.microsoft.com/vscode/devcontainers/java:dev-8-jdk-bullseye
 
 | Language / runtime                | Version                                                                                | Path                                                      |
 | --------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [Java](https://adoptopenjdk.net/) | 1.8.0_345<br />bash: line 1: /usr/local/openjdk-\*/bin/java: No such file or directory | /usr/local/sdkman/candidates/java/current<br />/usr/local |
+| [Java](HTTPS://adoptopenjdk.net/) | 1.8.0_345<br />bash: line 1: /usr/local/openjdk-\*/bin/java: No such file or directory | /usr/local/sdkman/candidates/java/current<br />/usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Other tools and utilities**
 
 | Tool                                            | Version | Path              |
 | ----------------------------------------------- | ------- | ----------------- |
-| [SDKMAN!](https://github.com/sdkman/sdkman-cli) | 5.16.0  | /usr/local/sdkman |
+| [SDKMAN!](HTTPS://github.com/sdkman/sdkman-cli) | 5.16.0  | /usr/local/sdkman |
 
 **Additional linux tools and packages**
 
@@ -129,20 +129,20 @@ mcr.microsoft.com/vscode/devcontainers/java:dev-8-jdk-buster
 
 | Language / runtime                | Version                                                                        | Path                                                      |
 | --------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------- |
-| [Java](https://adoptopenjdk.net/) | 1.8.0_345<br />bash: /usr/local/openjdk-\*/bin/java: No such file or directory | /usr/local/sdkman/candidates/java/current<br />/usr/local |
+| [Java](HTTPS://adoptopenjdk.net/) | 1.8.0_345<br />bash: /usr/local/openjdk-\*/bin/java: No such file or directory | /usr/local/sdkman/candidates/java/current<br />/usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Other tools and utilities**
 
 | Tool                                            | Version | Path              |
 | ----------------------------------------------- | ------- | ----------------- |
-| [SDKMAN!](https://github.com/sdkman/sdkman-cli) | 5.16.0  | /usr/local/sdkman |
+| [SDKMAN!](HTTPS://github.com/sdkman/sdkman-cli) | 5.16.0  | /usr/local/sdkman |
 
 **Additional linux tools and packages**
 

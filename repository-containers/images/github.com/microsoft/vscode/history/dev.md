@@ -1,9 +1,9 @@
-# [github.com/microsoft/vscode](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/github.com/microsoft/vscode)
+# [github.com/microsoft/vscode](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/github.com/microsoft/vscode)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/github.com/microsoft/vscode)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/github.com/microsoft/vscode)
 
 **Digest:**
 sha256:6448f501169ca48c5a68ff947bb5850a494a9a194bbd3e476e7d5a20b8b5223d

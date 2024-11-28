@@ -1,4 +1,4 @@
-# [codespaces-linux](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/codespaces-linux)
+# [codespaces-linux](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/codespaces-linux)
 
 This document describes the base contents of the default GitHub Codespaces dev
 container image. Note that this image also includes detection logic to
@@ -9,7 +9,7 @@ under `/opt`.
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/codespaces-linux)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/codespaces-linux)
 
 **Digest:**
 sha256:4f6b9768c78a08a04de3110f5ca667a3820a3451a036bc6e96f2570e8abf2b95
@@ -38,26 +38,26 @@ mcr.microsoft.com/vscode/devcontainers/universal:dev
 
 | Language / runtime                    | Version                | Path                                      |
 | ------------------------------------- | ---------------------- | ----------------------------------------- |
-| [Node.js](https://nodejs.org/en/)     | 14.19.1<br />16.14.2   | /opt/nodejs/&lt;version&gt;               |
-| [Python](https://www.python.org/)     | 3.10.4<br />3.9.7      | /opt/python/&lt;version&gt;               |
-| [Java](https://adoptopenjdk.net/)     | 11.0.14<br />17.0.2    | /opt/java/&lt;version&gt;                 |
-| [.NET](https://dotnet.microsoft.com/) | 3.1.417<br />6.0.201   | /home/codespaces/.dotnet<br />/opt/dotnet |
-| [Ruby](https://www.ruby-lang.org/en/) | 3.0.3<br />3.1.1       | /opt/ruby/&lt;version&gt;                 |
-| [PHP](https://xdebug.org/)            | 8.0.17<br />8.1.4      | /opt/php/&lt;version&gt;                  |
+| [Node.js](HTTPS://nodejs.org/en/)     | 14.19.1<br />16.14.2   | /opt/nodejs/&lt;version&gt;               |
+| [Python](HTTPS://www.python.org/)     | 3.10.4<br />3.9.7      | /opt/python/&lt;version&gt;               |
+| [Java](HTTPS://adoptopenjdk.net/)     | 11.0.14<br />17.0.2    | /opt/java/&lt;version&gt;                 |
+| [.NET](HTTPS://dotnet.microsoft.com/) | 3.1.417<br />6.0.201   | /home/codespaces/.dotnet<br />/opt/dotnet |
+| [Ruby](HTTPS://www.ruby-lang.org/en/) | 3.0.3<br />3.1.1       | /opt/ruby/&lt;version&gt;                 |
+| [PHP](HTTPS://xdebug.org/)            | 8.0.17<br />8.1.4      | /opt/php/&lt;version&gt;                  |
 | GCC                                   | 9.4.0-1ubuntu1~20.04.1 |
 | Clang                                 | 10.0.0-4ubuntu1        |
-| [Go](https://golang.org/dl)           | 1.19                   | /usr/local/go                             |
-| [Jekyll](https://jekyllrb.com/)       | 4.2.2                  |
+| [Go](HTTPS://golang.org/dl)           | 1.19                   | /usr/local/go                             |
+| [Jekyll](HTTPS://jekyllrb.com/)       | 4.2.2                  |
 
 **Tools installed using git**
 
 | Tool                                                  | Commit                                   | Path                        |
 | ----------------------------------------------------- | ---------------------------------------- | --------------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh)      | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/codespace/.oh-my-zsh  |
-| [nvm](https://github.com/nvm-sh/nvm.git)              | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /home/codespace/.nvm        |
-| [nvs](https://github.com/jasongin/nvs)                | bf45ef070e82356ed36a0f4d98f8ec651c8f0d98 | /home/codespace/.nvs        |
-| [rbenv](https://github.com/rbenv/rbenv.git)           | c4395e58201966d9f90c12bd6b7342e389e7a4cb | /usr/local/share/rbenv      |
-| [ruby-build](https://github.com/rbenv/ruby-build.git) | bd08de2e607119a7033c828e2fa0efbc41180d64 | /usr/local/share/ruby-build |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh)      | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/codespace/.oh-my-zsh  |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)              | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /home/codespace/.nvm        |
+| [nvs](HTTPS://github.com/jasongin/nvs)                | bf45ef070e82356ed36a0f4d98f8ec651c8f0d98 | /home/codespace/.nvs        |
+| [rbenv](HTTPS://github.com/rbenv/rbenv.git)           | c4395e58201966d9f90c12bd6b7342e389e7a4cb | /usr/local/share/rbenv      |
+| [ruby-build](HTTPS://github.com/rbenv/ruby-build.git) | bd08de2e607119a7033c828e2fa0efbc41180d64 | /usr/local/share/ruby-build |
 
 **Pip / pipx installed tools and packages**
 
@@ -101,18 +101,18 @@ mcr.microsoft.com/vscode/devcontainers/universal:dev
 
 | Tool                                                | Version                                                                                                                              | Path                                      |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- | -------------- |
-| [git](https://github.com/git/git)                   | 2.37.2                                                                                                                               | /usr/local                                |
-| [Xdebug](https://xdebug.org/)                       | 3.1.4                                                                                                                                | /opt/php/lts                              |
-| [Composer](https://getcomposer.org/)                | 2.3.4                                                                                                                                | /opt/php-composer                         |
-| [kubectl](https://github.com/kubernetes/kubectl)    | WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short. Use --output=yaml | json to get the full version.<br />1.24.4 | /usr/local/bin |
-| [Helm](https://github.com/helm/helm)                | 3.9.3                                                                                                                                | /usr/local/bin                            |
-| [Docker Compose](https://github.com/docker/compose) | 1.29.2                                                                                                                               | /usr/local/bin                            |
-| [SDKMAN!](https://github.com/sdkman/sdkman-cli)     | 5.16.0                                                                                                                               | /usr/local/sdkman                         |
-| [rvm](https://github.com/rvm/rvm)                   | 1.29.12                                                                                                                              | /usr/local/rvm                            |
-| [GitHub CLI](https://github.com/cli/cli)            | 2.14.4                                                                                                                               |
-| [yarn](https://yarnpkg.com/)                        | 1.22.15                                                                                                                              | /opt/yarn                                 |
-| [Maven](https://maven.apache.org/)                  | 3.8.5                                                                                                                                | /opt/maven                                |
-| [Gradle](https://gradle.org/)                       | 7.5.1                                                                                                                                |
+| [git](HTTPS://github.com/git/git)                   | 2.37.2                                                                                                                               | /usr/local                                |
+| [Xdebug](HTTPS://xdebug.org/)                       | 3.1.4                                                                                                                                | /opt/php/lts                              |
+| [Composer](HTTPS://getcomposer.org/)                | 2.3.4                                                                                                                                | /opt/php-composer                         |
+| [kubectl](HTTPS://github.com/kubernetes/kubectl)    | WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short. Use --output=yaml | json to get the full version.<br />1.24.4 | /usr/local/bin |
+| [Helm](HTTPS://github.com/helm/helm)                | 3.9.3                                                                                                                                | /usr/local/bin                            |
+| [Docker Compose](HTTPS://github.com/docker/compose) | 1.29.2                                                                                                                               | /usr/local/bin                            |
+| [SDKMAN!](HTTPS://github.com/sdkman/sdkman-cli)     | 5.16.0                                                                                                                               | /usr/local/sdkman                         |
+| [rvm](HTTPS://github.com/rvm/rvm)                   | 1.29.12                                                                                                                              | /usr/local/rvm                            |
+| [GitHub CLI](HTTPS://github.com/cli/cli)            | 2.14.4                                                                                                                               |
+| [yarn](HTTPS://yarnpkg.com/)                        | 1.22.15                                                                                                                              | /opt/yarn                                 |
+| [Maven](HTTPS://maven.apache.org/)                  | 3.8.5                                                                                                                                | /opt/maven                                |
+| [Gradle](HTTPS://gradle.org/)                       | 7.5.1                                                                                                                                |
 | Docker (Moby) CLI &amp; Engine                      | 20.10.17+azure                                                                                                                       |
 
 **Additional linux tools and packages**

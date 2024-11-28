@@ -1,9 +1,9 @@
-# [javascript-node](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/javascript-node)
+# [javascript-node](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/javascript-node)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/javascript-node)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/javascript-node)
 
 **Definition variations:**
 
@@ -43,14 +43,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-bullseye
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 18.2.0  | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 18.2.0  | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 
@@ -133,14 +133,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-16
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 16.15.0 | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 16.15.0 | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 
@@ -223,14 +223,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-14
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 14.19.3 | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 14.19.3 | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 
@@ -313,14 +313,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-buster
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 18.2.0  | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 18.2.0  | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 
@@ -403,14 +403,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-16-buster
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 16.15.0 | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 16.15.0 | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 
@@ -493,14 +493,14 @@ mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-14-buster
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | 14.19.3 | /usr/local |
+| [Node.js](HTTPS://nodejs.org/en/) | 14.19.3 | /usr/local |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                  |
 | ------------------------------------------------ | ---------------------------------------- | --------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 39b600e9e564db3dec265fcf2e3db4b5568dd93a | /home/node/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm  |
 
 **Npm globally installed tools and packages**
 

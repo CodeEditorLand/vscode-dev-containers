@@ -1,9 +1,9 @@
-# [dotnet](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/dotnet)
+# [dotnet](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/dotnet)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/dotnet)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/dotnet)
 
 **Definition variations:**
 
@@ -41,14 +41,14 @@ mcr.microsoft.com/vscode/devcontainers/dotnet:dev-6.0-bullseye
 
 | Language / runtime                    | Version         | Path |
 | ------------------------------------- | --------------- | ---- |
-| [.NET](https://dotnet.microsoft.com/) | 6.0.400 (6.0.8) | /usr |
+| [.NET](HTTPS://dotnet.microsoft.com/) | 6.0.400 (6.0.8) | /usr |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Additional linux tools and packages**
 
@@ -124,14 +124,14 @@ mcr.microsoft.com/vscode/devcontainers/dotnet:dev-6.0-focal
 
 | Language / runtime                    | Version         | Path |
 | ------------------------------------- | --------------- | ---- |
-| [.NET](https://dotnet.microsoft.com/) | 6.0.400 (6.0.8) | /usr |
+| [.NET](HTTPS://dotnet.microsoft.com/) | 6.0.400 (6.0.8) | /usr |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Additional linux tools and packages**
 
@@ -209,14 +209,14 @@ mcr.microsoft.com/vscode/devcontainers/dotnetcore:dev-3.1-bullseye
 
 | Language / runtime                    | Version         | Path |
 | ------------------------------------- | --------------- | ---- |
-| [.NET](https://dotnet.microsoft.com/) | 3.1.422 (3.1.2) | /usr |
+| [.NET](HTTPS://dotnet.microsoft.com/) | 3.1.422 (3.1.2) | /usr |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Additional linux tools and packages**
 
@@ -294,14 +294,14 @@ mcr.microsoft.com/vscode/devcontainers/dotnetcore:dev-3.1
 
 | Language / runtime                    | Version         | Path |
 | ------------------------------------- | --------------- | ---- |
-| [.NET](https://dotnet.microsoft.com/) | 3.1.422 (3.1.2) | /usr |
+| [.NET](HTTPS://dotnet.microsoft.com/) | 3.1.422 (3.1.2) | /usr |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 3668ec2a82250020ca0c285ef8b277f1385a8085 | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Additional linux tools and packages**
 

@@ -1,9 +1,9 @@
-# [python-3-miniconda](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-miniconda)
+# [python-3-miniconda](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-miniconda)
 
 **Image version:** dev
 
 **Source release/branch:**
-[main](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-miniconda)
+[main](HTTPS://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-miniconda)
 
 **Digest:**
 sha256:2452027f832a9f783aaf722c6c0c1a7eb847fcb86e89cb7e227ec57380e239f1
@@ -30,14 +30,14 @@ mcr.microsoft.com/vscode/devcontainers/miniconda:dev-3
 
 | Language / runtime                | Version | Path       |
 | --------------------------------- | ------- | ---------- |
-| [Python](https://www.python.org/) | 3.9.12  | /opt/conda |
+| [Python](HTTPS://www.python.org/) | 3.9.12  | /opt/conda |
 
 **Tools installed using git**
 
 | Tool                                             | Commit                                   | Path                    |
 | ------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
-| [nvm](https://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
+| [Oh My Zsh!](HTTPS://github.com/ohmyzsh/ohmyzsh) | 4c82a2eedf0c43d47601ffa8b0303ed1326fab8f | /home/vscode/.oh-my-zsh |
+| [nvm](HTTPS://github.com/nvm-sh/nvm.git)         | 3fea5493a431ac64470d4230d4b51438cf213bd1 | /usr/local/share/nvm    |
 
 **Pip / pipx installed tools and packages**
 
@@ -59,7 +59,7 @@ mcr.microsoft.com/vscode/devcontainers/miniconda:dev-3
 
 | Tool                                    | Version | Path       |
 | --------------------------------------- | ------- | ---------- |
-| [conda](https://github.com/conda/conda) | 4.12.0  | /opt/conda |
+| [conda](HTTPS://github.com/conda/conda) | 4.12.0  | /opt/conda |
 
 **Additional linux tools and packages**
 
