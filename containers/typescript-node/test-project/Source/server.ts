@@ -17,6 +17,7 @@ app.get("/", (req: any, res: any) => {
 });
 
 app.listen(PORT, HOST);
+
 console.log(`Running on http://${HOST}:${PORT}`);
 
 // Used for automated testing

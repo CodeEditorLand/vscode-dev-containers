@@ -18,6 +18,7 @@ const app = express();
 app.use("/accounts", accounts);
 
 app.listen(PORT, HOST);
+
 console.log(`Running on http://${HOST}:${PORT}`);
 
 // Used for automated testing
