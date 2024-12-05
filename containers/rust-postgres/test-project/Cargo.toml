@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["VS Code <vscode@microsoft.com>"]
 
 [dev-dependencies]
-postgres = "0.19"
+postgres = { version = "0.19" }
