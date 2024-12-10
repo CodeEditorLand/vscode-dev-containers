@@ -1,9 +1,9 @@
 {
-	"name": "api",
+	"dependencies": {},
 	"description": "",
+	"devDependencies": {},
+	"name": "api",
 	"scripts": {
 		"start": "func start"
-	},
-	"dependencies": {},
-	"devDependencies": {}
+	}
 }
