@@ -1,11 +1,5 @@
 {
 	"name": "test-project",
-	"version": "0.1.0",
-	"keywords": [
-		"BuckleScript"
-	],
-	"license": "MIT",
-	"author": "",
 	"scripts": {
 		"build": "bsb -make-world",
 		"clean": "bsb -clean-world",
