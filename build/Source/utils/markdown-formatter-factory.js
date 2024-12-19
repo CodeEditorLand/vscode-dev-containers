@@ -51,7 +51,7 @@ Returns:
 {
     name: "Xdebug",
     version: "2.9.6",
-    "url": "https://pecl.php.net/get/xdebug-2.9.6.tgz"
+    "url": "HTTPS://pecl.php.net/get/xdebug-2.9.6.tgz"
 }
 
 */
