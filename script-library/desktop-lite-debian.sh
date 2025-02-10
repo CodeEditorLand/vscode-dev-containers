@@ -286,7 +286,7 @@ EOF
 
 # Container ENTRYPOINT script
 cat << EOF > /usr/local/share/desktop-init.sh
-#!/bin/bash
+#!/usr/bin/env bash
 
 user_name="${USERNAME}"
 group_name="$(id -gn ${USERNAME})"

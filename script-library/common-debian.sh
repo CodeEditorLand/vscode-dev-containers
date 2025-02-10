@@ -263,7 +263,7 @@ EOF
 
 # code shim, it fallbacks to code-insiders if code is not available
 cat << 'EOF' > /usr/local/bin/code
-#!/bin/sh
+#!/usr/bin/env bash
 
 get_in_path_except_current() {
     which -a "$1" | grep -A1 "$0" | grep -v "$0"
