@@ -221,7 +221,7 @@ async function getNpmGlobalPackageInfo(imageTagOrContainerName, packageList) {
     console.log(`(*) Gathering information about globally installed npm packages...`);
 
     const packageListString = packageList.reduce((prev, current) => prev + ' ' + current, '');
-    const npmOutputRaw = await getCommandOutputFromContainer(imageTagOrContainerName, `bash -l -c 'set -e && npm ls --global --depth 1 --json ${packageListString}' 2>/dev/null`);
+    const npmOutputRaw = await getCommandOutputFromContainer(imageTagOrContainerName, `bash -l -c 'set -e && npm ls --global --depth 2 --json ${packageListString}' 2>/dev/null`);
     const npmOutput = JSON.parse(npmOutputRaw);
 
     return packageList.map((package) => {
